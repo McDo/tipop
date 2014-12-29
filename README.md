@@ -40,7 +40,7 @@ The POP variable is a reference to the Module object.
 |center|center: {|center: {|center: {|
 |center.x|x:160;<br>x:'5%';|x:160;<br>x:'5%';|x:-290;<br><font color='#ccc'>// velocity</font>|
 |center.y|y:420;<br>y:'4%';|y:160;<br>y:'4%';|y:-530;<br><font color='#ccc'>// velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;;;</font>|
+||}|}|}|
 |opacity|opacity: 0.7;|opacity: 0.7;|opacity: -1.8;<br><font color='#ccc'>// velocity</font>|
 |zIndex|zIndex: 20;|zIndex: 20;|\|
 |color<br>*<font color='#ccc'>Ti.UI.Label</font>*|color: '#FFD3E0';|color: '#FFD3E0';<br>|\|
@@ -55,24 +55,24 @@ The POP variable is a reference to the Module object.
 |rotate.x|x:80;<br><font color='#ccc'>// angle</font>|x:80;<br><font color='#ccc'>// angle</font>|x:-190;<br><font color='#ccc'>// angle, yet velocity</font>|
 |rotate.y|y:-35;<br><font color='#ccc'>// angle</font>|y:-35;<br><font color='#ccc'>// angle</font>|y:120;<br><font color='#ccc'>// angle, yet velocity</font>|
 |rotate.z|z:20;<br><font color='#ccc'>// angle</font>|z:20;<br><font color='#ccc'>// angle</font>|z:-40;<br><font color='#ccc'>// angle, yet velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;</font>|
+||}|}|}|
 |scale|scale: {|scale: {|scale: {|
 |scale.x|x:2.5;|x:2.5;|x:-10;<br><font color='#ccc'>// velocity</font>|
 |scale.y|y:-3.5;|y:-3.5;|y:1.2;<br><font color='#ccc'>// velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;</font>|
+||}|}|}|
 |translate|translate: {|translate: {|translate: {|
 |translate.x|x:30;|x:30;|x:-10;<br><font color='#ccc'>// velocity</font>|
 |translate.y|y:-10;|y:-10;|y:200;<br><font color='#ccc'>// velocity</font>|
 |translate.z|z:75;|z:75;|z:-120;<br><font color='#ccc'>// velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;;;</font>|
+||}|}|}|
 |subTranslate|subTranslate: {|subTranslate: {|subTranslate: {|
 |subTranslate.x|x:80;|x:80;|x:-50;<br><font color='#ccc'>// velocity</font>|
 |subTranslate.y|y:-15;|y:-15;|y:10;<br><font color='#ccc'>// velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;</font>|
+||}|}|}|
 |scrollViewContentOffset<br><font color='#ccc'>Ti.UI.ScrollView</font>|scrollViewContentOffset: {|scrollViewContentOffset: {|scrollViewContentOffset: {|
 |scrollViewContentOffset.x|x:72;|x:72;|x:-155;<br><font color='#ccc'>// velocity</font>|
 |scrollViewContentOffset.y|y:-500;|y:-500;|y:188;<br><font color='#ccc'>// velocity</font>|
-||}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font>|}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font></font>|}<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font>|
+||}|}|}|
 |===|
 |**Options**|
 |duration|duration: 1030|\\|\|
@@ -88,7 +88,7 @@ The POP variable is a reference to the Module object.
 |addictive|addictive: true;<br><font color='#ccc'> // or false</font>|addictive: true;<br><font color='#ccc'> // or false</font>|addictive: true;<br><font color='#ccc'> // or false</font>|
 |repeatForever|repeatForever: true;<br><font color='#ccc'> // or false</font>|repeatForever: true;<br><font color='#ccc'> // or false</font>|repeatForever: true;<br><font color='#ccc'> // or false</font>|
 |autoreverse|autoreverse: true;<br><font color='#ccc'> // or false</font>|autoreverse: true;<br><font color='#ccc'> // or false</font>|autoreverse: true;<br><font color='#ccc'> // or false</font>|
-||`});`<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font>|`});`<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font>|`});`<font color='#fff'>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</font>|
+||`});`|`});`|`});`|
 
 Beside, you could use `POP.clear(myView)` to remove all the pop animations attached to `myView`, and it could be chained with basic, spring or decay mehtods.
 
