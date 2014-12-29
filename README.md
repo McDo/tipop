@@ -90,7 +90,7 @@ The POP variable is a reference to the Module object.
 |autoreverse|autoreverse: true;<br><font color='#ccc'> // or false</font>|autoreverse: true;<br><font color='#ccc'> // or false</font>|autoreverse: true;<br><font color='#ccc'> // or false</font>|
 ||`});`|`});`|`});`|
 
-Beside, you could use `POP.clear(myView)` to remove all the pop animations attached to `myView`, and it could be chained with basic, spring or decay mehtods.
+Beside, you could use `POP.clear(myView)` to remove all the pop animations attached to `myView`, and it could be chained with basic, spring or decay methods.
 
 ```javascript
 POP
