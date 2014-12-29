@@ -42,14 +42,14 @@ The POP variable is a reference to the Module object.
 |center.y|y:420;<br>y:'4%';|y:160;<br>y:'4%';|y:-530;<br><font color='#ccc'>// velocity</font>|
 ||}|}|}|
 |opacity|opacity: 0.7;|opacity: 0.7;|opacity: -1.8;<br><font color='#ccc'>// velocity</font>|
-|zIndex|zIndex: 20;|zIndex: 20;|\|
-|color<br>*<font color='#ccc'>Ti.UI.Label</font>*|color: '#FFD3E0';|color: '#FFD3E0';<br>|\|
-|backgroundColor|backgroundColor: '#FFD3E0';<br>|backgroundColor: '#FFD3E0';|\|
-|tintColor|tintColor: '#55EFCB';<br>|tintColor: '#55EFCB';|\|
+|zIndex|zIndex: 20;|zIndex: 20;|\\|
+|color<br>*<font color='#ccc'>Ti.UI.Label</font>*|color: '#FFD3E0';|color: '#FFD3E0';<br>|\\|
+|backgroundColor|backgroundColor: '#FFD3E0';<br>|backgroundColor: '#FFD3E0';|\\|
+|tintColor|tintColor: '#55EFCB';<br>|tintColor: '#55EFCB';|\\|
 |borderRadius|borderRadius: 75;<br>|borderRadius: 75;|borderRadius: -68;<br><font color='#ccc'>// velocity</font>|
 |borderWidth|borderWidth: 15;<br>|borderWidth: 15;|borderWidth: -22;<br><font color='#ccc'>// velocity</font>|
-|borderColor|borderColor: '#FFD3E0';<br>|borderColor: '#FFD3E0';|\|
-|shadowColor|shadowColor: '#CCCCCC';<br>|shadowColor: '#CCCCCC';|\|
+|borderColor|borderColor: '#FFD3E0';<br>|borderColor: '#FFD3E0';|\\|
+|shadowColor|shadowColor: '#CCCCCC';<br>|shadowColor: '#CCCCCC';|\\|
 |shadowOpacity|shadowOpacity: 0.4;|shadowOpacity: 0.4;|shadowOpacity: -0.8;<br><font color='#ccc'>// velocity</font>|
 |rotate|rotate: {|rotate: {|rotate: {|
 |rotate.x|x:80;<br><font color='#ccc'>// angle</font>|x:80;<br><font color='#ccc'>// angle</font>|x:-190;<br><font color='#ccc'>// angle, yet velocity</font>|
@@ -76,7 +76,7 @@ The POP variable is a reference to the Module object.
 |===|
 |**Options**|
 |duration|duration: 1030|\\|\|
-|easing|easing: <font color='#aaa'>'default'</font>;<br>easing: <font color='#aaa'>'linear'</font>;<br><br>easing: <font color='#aaa'>'easeIn'</font>;<br>easing: <font color='#aaa'>'easeOut'</font>;<br>easing: <font color='#aaa'>'easeInOut'</font>;<br><br>easing: <font color='#aaa'>'easeInSine'</font>;<br>easing: <font color='#aaa'>'easeOutSine'</font>;<br>easing: <font color='#aaa'>'easeInOutSine'</font>;<br><br>easing: <font color='#aaa'>'easeInQuad'</font>;<br>easing: <font color='#aaa'>'easeOutQuad'</font>;<br>easing: <font color='#aaa'>'easeInOutQuad'</font>;<br><br>easing: <font color='#aaa'>'easeInCubic'</font>;<br>easing: <font color='#aaa'>'easeOutCubic'</font>;<br>easing: <font color='#aaa'>'easeInOutCubic'</font>;<br><br>easing: <font color='#aaa'>'easeInQuart'</font>;<br>easing: <font color='#aaa'>'easeOutQuart'</font>;<br>easing: <font color='#aaa'>'easeInOutQuart'</font>;<br><br>easing: <font color='#aaa'>'easeInQuint'</font>;<br>easing: <font color='#aaa'>'easeOutQuint'</font>;<br>easing: <font color='#aaa'>'easeInOutQuint'</font>;<br><br>easing: <font color='#aaa'>'easeInExpo'</font>;<br>easing: <font color='#aaa'>'easeOutExpo'</font>;<br>easing: <font color='#aaa'>'easeInOutExpo'</font>;<br><br>easing: <font color='#aaa'>'easeInCirc'</font>;<br>easing: <font color='#aaa'>'easeOutCirc'</font>;<br>easing: <font color='#aaa'>'easeInOutCirc'</font>;<br><br>easing: <font color='#aaa'>'easeInBack'</font>;<br>easing: <font color='#aaa'>'easeOutBack'</font>;<br>easing: <font color='#aaa'>'easeInOutBack'</font>;<br>|\\|\|
+|easing|easing: <font color='#aaa'>'default'</font>;<br>easing: <font color='#aaa'>'linear'</font>;<br><br>easing: <font color='#aaa'>'easeIn'</font>;<br>easing: <font color='#aaa'>'easeOut'</font>;<br>easing: <font color='#aaa'>'easeInOut'</font>;<br><br>easing: <font color='#aaa'>'easeInSine'</font>;<br>easing: <font color='#aaa'>'easeOutSine'</font>;<br>easing: <font color='#aaa'>'easeInOutSine'</font>;<br><br>easing: <font color='#aaa'>'easeInQuad'</font>;<br>easing: <font color='#aaa'>'easeOutQuad'</font>;<br>easing: <font color='#aaa'>'easeInOutQuad'</font>;<br><br>easing: <font color='#aaa'>'easeInCubic'</font>;<br>easing: <font color='#aaa'>'easeOutCubic'</font>;<br>easing: <font color='#aaa'>'easeInOutCubic'</font>;<br><br>easing: <font color='#aaa'>'easeInQuart'</font>;<br>easing: <font color='#aaa'>'easeOutQuart'</font>;<br>easing: <font color='#aaa'>'easeInOutQuart'</font>;<br><br>easing: <font color='#aaa'>'easeInQuint'</font>;<br>easing: <font color='#aaa'>'easeOutQuint'</font>;<br>easing: <font color='#aaa'>'easeInOutQuint'</font>;<br><br>easing: <font color='#aaa'>'easeInExpo'</font>;<br>easing: <font color='#aaa'>'easeOutExpo'</font>;<br>easing: <font color='#aaa'>'easeInOutExpo'</font>;<br><br>easing: <font color='#aaa'>'easeInCirc'</font>;<br>easing: <font color='#aaa'>'easeOutCirc'</font>;<br>easing: <font color='#aaa'>'easeInOutCirc'</font>;<br><br>easing: <font color='#aaa'>'easeInBack'</font>;<br>easing: <font color='#aaa'>'easeOutBack'</font>;<br>easing: <font color='#aaa'>'easeInOutBack'</font>;<br>|\\|\\|
 |springBounciness<br><font color='#ccc'>value between 0-20 default at 4</font>|\\|springBounciness: 14;|\\|
 |springSpeed<br><font color='#ccc'>value between 0-20 default at 4</font>|\\|springSpeed: 3;|\\|
 |tension|\\|tension: 10;|\\|
