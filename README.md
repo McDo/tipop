@@ -2,7 +2,7 @@
 
 Tipop is a titanium client for [facebook pop](https://github.com/facebook/pop), the rock star animation engine written for iOS / OS X. pop supports both static and dynamic animations, which makes the UI interactions more realistic.
  
-In addition to the linear and basic ease-in-out functions, tipop adds another 24 easing function supports  like quad, cubic or expo. The API is similar to the one that Ti.UI.Animation has, which we Ti-Devs must be familiar with.
+In addition to the linear and basic ease-in-out functions, tipop adds another 24 easing function supports like quad, cubic or expo. The API is similar to the one that Ti.UI.Animation has, which we Ti-Devs must be familiar with.
 
 ****Built for Titanium 3.4.0.GA by default.***
 
