@@ -33,10 +33,10 @@ The POP variable is a reference to the Module object.
 |   | Basic Animation              | Spring Animation | Decay Animation |
 |:-----------:|:------------------------------:|:------------------:|:-----------------:|
 |**Properties**|POP.***basic***( myView, `{`|POP.***spring***( myView, `{`|POP.***decay***( myView,` {`|
-|left|left: 140;<br>left: 65%;|left: 140;<br>left: 65%;|left: -20;<br><font color='#ccc'>// velocity</font>|
-|top|top: -50;<br>top: 15%;|top: -50;<br>top: 15%;|top: 90;<br><font color='#ccc'>// velocity</font>|
-|width|width: 100;<br>width: 30%;|width: 100;<br>width: 30%;|width: -40;<br><font color='#ccc'>// velocity</font>|
-|height|height: 42;<br>height: 26%;|height: 42;<br>height: 26%;|height: 25;<br><font color='#ccc'>// velocity</font>|
+|left|left: 140;<br>left: '65%';|left: 140;<br>left: '65%';|left: -20;<br><font color='#ccc'>// velocity</font>|
+|top|top: -50;<br>top: '15%';|top: -50;<br>top: '15%';|top: 90;<br><font color='#ccc'>// velocity</font>|
+|width|width: 100;<br>width: '30%';|width: 100;<br>width: '30%';|width: -40;<br><font color='#ccc'>// velocity</font>|
+|height|height: 42;<br>height: '26%';|height: 42;<br>height: '26%';|height: 25;<br><font color='#ccc'>// velocity</font>|
 |center|center: {|center: {|center: {|
 |center.x|x:160;<br>x:'5%';|x:160;<br>x:'5%';|x:-290;<br><font color='#ccc'>// velocity</font>|
 |center.y|y:420;<br>y:'4%';|y:160;<br>y:'4%';|y:-530;<br><font color='#ccc'>// velocity</font>|
