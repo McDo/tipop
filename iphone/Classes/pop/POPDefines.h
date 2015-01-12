@@ -10,6 +10,7 @@
 #ifndef POP_POPDefines_h
 #define POP_POPDefines_h
 
+#import <Foundation/Foundation.h>
 #import <Availability.h>
 
 #ifdef __cplusplus
@@ -28,10 +29,13 @@
 # define POP_NOTHROW
 #endif
 
-#if TARGET_OS_MAC
-  #define SCENEKIT_SDK_AVAILABLE defined(__MAC_10_10)
-#elif TARGET_OS_IPHONE
-  #define SCENEKIT_SDK_AVAILABLE defined(__IPHONE_8_0)
+
+
+#if TARGET_OS_IPHONE
+  // #define SCENEKIT_SDK_AVAILABLE defined(__IPHONE_8_0)
+  #define SCENEKIT_SDK_AVAILABLE (NSFoundationVersionNumber > 1134)
+//#elif TARGET_OS_MAC
+  //#define SCENEKIT_SDK_AVAILABLE defined(__MAC_10_10)
 #endif
 
 #endif

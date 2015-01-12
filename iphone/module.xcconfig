@@ -10,12 +10,12 @@
 //
 // How to add a Framework (example)
 //
- OTHER_LDFLAGS=$(inherited) -framework QuartzCore -framework UIKit -framework CoreFoundation -framework CoreGraphics -framework Foundation -framework SceneKit /usr/lib/libc++.dylib
+ OTHER_LDFLAGS=$(inherited) -framework QuartzCore -framework UIKit -framework CoreFoundation -framework CoreGraphics -framework Foundation /usr/lib/libc++.dylib
 //
 // Adding a framework for a specific version(s) of iPhone:
 //
-// OTHER_LDFLAGS[sdk=iphoneos4*]=$(inherited) -framework Foo
-// OTHER_LDFLAGS[sdk=iphonesimulator4*]=$(inherited) -framework Foo
+ OTHER_LDFLAGS[sdk=iphoneos8*]=$(inherited) -framework SceneKit
+ OTHER_LDFLAGS[sdk=iphonesimulator8*]=$(inherited) -framework SceneKit
 //
 //
 // How to add a compiler define:

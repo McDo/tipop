@@ -6,31 +6,35 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>7A934200-7500-428A-9AA0-ABE04844894B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>tipop</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</key>
-		<string>https://github.com/facebook/pop.git</string>
+		<key>4E477400E89FAD39E0445283F64D265E96881ECC</key>
+		<string>https://github.com/McDo/tipop.git</string>
 	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iphone/tipop.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</key>
-		<string>pop/</string>
+		<key>4E477400E89FAD39E0445283F64D265E96881ECC</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/facebook/pop.git</string>
+	<string>https://github.com/McDo/tipop.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</string>
+	<string>4E477400E89FAD39E0445283F64D265E96881ECC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</string>
+			<string>4E477400E89FAD39E0445283F64D265E96881ECC</string>
 			<key>IDESourceControlWCCName</key>
-			<string>pop</string>
+			<string>tipop</string>
 		</dict>
 	</array>
 </dict>

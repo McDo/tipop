@@ -7,13 +7,13 @@ In addition to the linear and basic ease-in-out functions, tipop adds another 24
 ****Built for Titanium 3.4.0.GA by default.***
 
 <div style='text-align:center;'>
-<img src="documentation/tipop.png">
+<img src="tipop.png">
 </div>
 
 
 ## Installation
 
-Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.0.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
+Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.1.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
 
 
 ## Usage

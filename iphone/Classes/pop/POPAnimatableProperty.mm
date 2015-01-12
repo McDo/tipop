@@ -144,6 +144,7 @@ NSString * const kPOPSCNNodeScaleY = @"scnnode.scale.y";
 NSString * const kPOPSCNNodeScaleZ = @"scnnode.scale.z";
 NSString * const kPOPSCNNodeScaleXY = @"scnnode.scale.xy";
 
+
 /**
  State structure internal to static animatable property.
  */

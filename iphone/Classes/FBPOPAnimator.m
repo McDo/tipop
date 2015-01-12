@@ -497,7 +497,7 @@
                 [proxy.view pop_removeAnimationForKey:@"BasicAnimationCenter"];
                 POPBasicAnimation *animCenter = [POPBasicAnimation animationWithPropertyNamed:kPOPViewCenter];
                 animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerX.value, centerY.value)];
-                //XXX: setCenter would make our view moving back to the original position. need more dubugs.
+                //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                    if ( completed ) {
 //                        NSDictionary *c = [[NSDictionary alloc] initWithObjects:@[@(centerX.value), @(centerY.value)] forKeys:@[@"x", @"y"]];
@@ -1180,7 +1180,7 @@ animation.removedOnCompletion = true; \
                     [proxy.view pop_removeAnimationForKey:@"SpringAnimationCenter"];
                     POPSpringAnimation *animCenter = [POPSpringAnimation animationWithPropertyNamed:kPOPViewCenter];
                     animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
-                //XXX: setCenter would make our view moving back to the original position. need more dubugs.
+                //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                    animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                        if ( completed ) {
 //                            NSDictionary *c = [[NSDictionary alloc] initWithObjects:@[@(centerXVal), @(centerYVal)] forKeys:@[@"x", @"y"]];
@@ -1853,7 +1853,7 @@ animation.removedOnCompletion = true; \
                     __weak POPDecayAnimation *weakAnimCenter = animCenter;
                     
                     animCenter.velocity = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
-                //XXX: setCenter would make our view moving back to the original position. need more dubugs.
+                //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                    animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                        if ( completed ) {
 //                            NSDictionary *c = [[NSDictionary alloc] initWithObjects:@[@([weakAnimCenter.toValue CGPointValue].x), @([weakAnimCenter.toValue CGPointValue].y)] forKeys:@[@"x", @"y"]];

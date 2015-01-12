@@ -81,12 +81,7 @@
 		9DA24E571A02347100BB89C7 /* TransformationMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DA24E231A02347100BB89C7 /* TransformationMatrix.cpp */; };
 		9DA24E581A02347100BB89C7 /* TransformationMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DA24E241A02347100BB89C7 /* TransformationMatrix.h */; };
 		9DA24E591A02347100BB89C7 /* UnitBezier.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DA24E251A02347100BB89C7 /* UnitBezier.h */; };
-		9DA24E5B1A0246A300BB89C7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA24E5A1A0246A300BB89C7 /* CoreGraphics.framework */; };
-		9DA24E5D1A0246A900BB89C7 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA24E5C1A0246A900BB89C7 /* CoreFoundation.framework */; };
-		9DA24E5F1A0246AF00BB89C7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA24E5E1A0246AF00BB89C7 /* UIKit.framework */; };
-		9DA24E611A0246B900BB89C7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA24E601A0246B900BB89C7 /* QuartzCore.framework */; };
 		AA747D9F0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch */; };
-		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,12 +157,7 @@
 		9DA24E231A02347100BB89C7 /* TransformationMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformationMatrix.cpp; sourceTree = "<group>"; };
 		9DA24E241A02347100BB89C7 /* TransformationMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformationMatrix.h; sourceTree = "<group>"; };
 		9DA24E251A02347100BB89C7 /* UnitBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitBezier.h; sourceTree = "<group>"; };
-		9DA24E5A1A0246A300BB89C7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		9DA24E5C1A0246A900BB89C7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		9DA24E5E1A0246AF00BB89C7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		9DA24E601A0246B900BB89C7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		AA747D9E0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuyMcdoooooTipop_Prefix.pch; sourceTree = SOURCE_ROOT; };
-		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libGuyMcdoooooTipop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGuyMcdoooooTipop.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -176,11 +166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9DA24E611A0246B900BB89C7 /* QuartzCore.framework in Frameworks */,
-				9DA24E5F1A0246AF00BB89C7 /* UIKit.framework in Frameworks */,
-				9DA24E5D1A0246A900BB89C7 /* CoreFoundation.framework in Frameworks */,
-				9DA24E5B1A0246A300BB89C7 /* CoreGraphics.framework in Frameworks */,
-				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,22 +185,9 @@
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
-				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
 			name = tipop;
-			sourceTree = "<group>";
-		};
-		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				9DA24E601A0246B900BB89C7 /* QuartzCore.framework */,
-				9DA24E5E1A0246AF00BB89C7 /* UIKit.framework */,
-				9DA24E5C1A0246A900BB89C7 /* CoreFoundation.framework */,
-				9DA24E5A1A0246A300BB89C7 /* CoreGraphics.framework */,
-				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
