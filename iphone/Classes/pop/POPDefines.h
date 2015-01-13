@@ -29,13 +29,13 @@
 # define POP_NOTHROW
 #endif
 
+//#if TARGET_OS_MAC
+//#define SCENEKIT_SDK_AVAILABLE defined(__MAC_10_10)
+//#elif TARGET_OS_IPHONE
+//#define SCENEKIT_SDK_AVAILABLE defined(__IPHONE_8_0)
+//#endif
 
-
-#if TARGET_OS_IPHONE
-  // #define SCENEKIT_SDK_AVAILABLE defined(__IPHONE_8_0)
-  #define SCENEKIT_SDK_AVAILABLE (NSFoundationVersionNumber > 1134)
-//#elif TARGET_OS_MAC
-  //#define SCENEKIT_SDK_AVAILABLE defined(__MAC_10_10)
-#endif
+//
+#define SCENEKIT_SDK_AVAILABLE 0
 
 #endif

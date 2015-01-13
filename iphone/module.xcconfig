@@ -14,8 +14,8 @@
 //
 // Adding a framework for a specific version(s) of iPhone:
 //
- OTHER_LDFLAGS[sdk=iphoneos8*]=$(inherited) -framework SceneKit
- OTHER_LDFLAGS[sdk=iphonesimulator8*]=$(inherited) -framework SceneKit
+// OTHER_LDFLAGS[sdk=iphoneos8*]=$(inherited) -weak_framework SceneKit
+// OTHER_LDFLAGS[sdk=iphonesimulator8*]=$(inherited) -weak_framework SceneKit
 //
 //
 // How to add a compiler define:
