@@ -186,9 +186,9 @@
 		0867D691FE84028FC02AAC07 /* tipop */ = {
 			isa = PBXGroup;
 			children = (
-				9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
+				9DFFF43E1A66881600F7A8AE /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
 			name = tipop;
@@ -294,6 +294,14 @@
 				9DA24E251A02347100BB89C7 /* UnitBezier.h */,
 			);
 			path = WebCore;
+			sourceTree = "<group>";
+		};
+		9DFFF43E1A66881600F7A8AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -499,6 +507,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = (
 					"-DDEBUG",
@@ -550,7 +559,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "";
