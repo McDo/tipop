@@ -71,7 +71,7 @@ The POP variable is a reference to the Module object.
 |**CAShapeLayer Animations:** ( the layer should be the first sublayer of proxy.view.layer )||||
 |***strokeStart***|strokeStart:0.5,|strokeStart:0.5,|strokeStart:-2.0,<br><font color='#ccc'>// velocity</font>|
 |***strokeEnd***|strokeEnd:1.0,|strokeEnd:1.0,|strokeEnd:2.0,<br><font color='#ccc'>// velocity</font>|
-|***lineWith***|lineWith:5.0,|lineWith:5.0,|lineWith:-8.0,<br><font color='#ccc'>// velocity</font>|
+|***lineWidth***|lineWidth:5.0,|lineWidth:5.0,|lineWidth:-8.0,<br><font color='#ccc'>// velocity</font>|
 |***strokeColor***|strokeColor:'#5A5A5A',|strokeColor:'#5A5A5A',|\\|
 |***fillColor***|fillColor:'blue',|fillColor:'blue',|\\|
 ||}|}|}|
