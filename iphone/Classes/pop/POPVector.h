@@ -355,7 +355,7 @@ namespace POP {
 
     // operator overloads
     CGFloat &operator[](size_t i) const {
-//tipopIssue      NSCAssert(size() > i, @"unexpected vector size:%lu", (unsigned long)size());
+      //tipopIssue NSCAssert(size() > i, @"unexpected vector size:%lu", (unsigned long)size());
       return _values[i];
     }
 

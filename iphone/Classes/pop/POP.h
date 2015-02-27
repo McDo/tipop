@@ -25,9 +25,4 @@
 #import "POPSpringAnimation.h"
 #import "POPLayerExtras.h"
 
-// Extra includes so iOS 8 Framework target doesn't complain about them not being in the umbrella header.
-#import "POPAnimationPrivate.h"
-#import "POPAnimatorPrivate.h"
-
-
 #endif /* POP_POP_H */

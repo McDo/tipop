@@ -58,6 +58,4 @@ dependencies: \
   /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPCustomAnimation.h \
   /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPDecayAnimation.h \
   /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPLayerExtras.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationPrivate.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimatorPrivate.h \
   /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/CAMediaTimingFunction+ExtendedFunc.h

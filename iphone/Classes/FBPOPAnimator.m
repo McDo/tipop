@@ -46,6 +46,12 @@
     TiColor *shadowColor = [TiUtils colorValue:@"shadowColor" properties:properties def:nil];
     NSNumber *shadowOpacity = [TiUtils numberFromObject:[properties objectForKey:@"shadowOpacity"]];
     
+    NSNumber *strokeStart = [TiUtils numberFromObject:[properties objectForKey:@"strokeStart"]];
+    NSNumber *strokeEnd = [TiUtils numberFromObject:[properties objectForKey:@"strokeEnd"]];
+    TiColor *strokeColor = [TiUtils colorValue:@"strokeColor" properties:properties def:nil];
+    TiColor *fillColor = [TiUtils colorValue:@"fillColor" properties:properties def:nil];
+    NSNumber *lineWidth = [TiUtils numberFromObject:[properties objectForKey:@"lineWidth"]];
+    
     NSNumber *delay = [TiUtils numberFromObject:[properties objectForKey:@"delay"]];
     NSNumber *duration = [TiUtils numberFromObject:[properties objectForKey:@"duration"]];
     NSString *easing = [TiUtils stringValue:@"easing" properties:properties def:@"default"];
@@ -164,7 +170,6 @@
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationBackgroundColor"];
         
         POPBasicAnimation *animBackgroundColor = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
-        NSLog(@"background color is %@", backgroundColor.color);
         animBackgroundColor.toValue = backgroundColor.color;
         animBackgroundColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
@@ -482,21 +487,86 @@
         
     }
     
-    if ( nil != [properties objectForKey:@"center"] ) {
-        
-        id center = [properties objectForKey:@"center"];
-        
-        if ( [center isKindOfClass:[NSDictionary class]] ) {
+    if ( nil != proxy.view.layer.sublayers[0] &&
+         [proxy.view.layer.sublayers[0] isKindOfClass:[CAShapeLayer class]] ) {
+    
+        if ( nil != strokeStart ) {
             
-            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
-            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeStart"];
             
-            if ( !TiDimensionIsUndefined(centerX) &&
-                 !TiDimensionIsUndefined(centerY) ) {
-                
-                [proxy.view pop_removeAnimationForKey:@"BasicAnimationCenter"];
-                POPBasicAnimation *animCenter = [POPBasicAnimation animationWithPropertyNamed:kPOPViewCenter];
-                animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerX.value, centerY.value)];
+            POPBasicAnimation *animStrokeStart = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
+            animStrokeStart.toValue = @(strokeStart.floatValue);
+            BASIC_POP_ATTR( animStrokeStart );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"BasicAnimationStrokeStart"];
+            
+        }
+        
+        if ( nil != strokeEnd ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeEnd"];
+            
+            POPBasicAnimation *animStrokeEnd = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
+            animStrokeEnd.toValue = @(strokeEnd.floatValue);
+            BASIC_POP_ATTR( animStrokeEnd );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"BasicAnimationStrokeEnd"];
+            
+        }
+        
+        if ( nil != lineWidth ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationLineWidth"];
+            
+            POPBasicAnimation *animLineWidth = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
+            animLineWidth.toValue = @(lineWidth.floatValue);
+            BASIC_POP_ATTR( animLineWidth );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"BasicAnimationLineWidth"];
+            
+        }
+        
+        if ( nil != strokeColor ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeColor"];
+            
+            POPBasicAnimation *animStrokeColor = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeColor];
+            animStrokeColor.toValue = strokeColor.color;
+            BASIC_POP_ATTR( animStrokeColor );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeColor forKey:@"BasicAnimationStrokeColor"];
+            
+        }
+        
+        if ( nil != fillColor ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationFillColor"];
+            
+            POPBasicAnimation *animFillColor = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerFillColor];
+            animFillColor.toValue = fillColor.color;
+            BASIC_POP_ATTR( animFillColor );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animFillColor forKey:@"BasicAnimationFillColor"];
+            
+        }
+        
+    }
+    
+//    if ( nil != [properties objectForKey:@"center"] ) {
+//        
+//        id center = [properties objectForKey:@"center"];
+//        
+//        if ( [center isKindOfClass:[NSDictionary class]] ) {
+//            
+//            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
+//            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+//            
+//            if ( !TiDimensionIsUndefined(centerX) &&
+//                 !TiDimensionIsUndefined(centerY) ) {
+//                
+//                [proxy.view pop_removeAnimationForKey:@"BasicAnimationCenter"];
+//                POPBasicAnimation *animCenter = [POPBasicAnimation animationWithPropertyNamed:kPOPViewCenter];
+//                animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerX.value, centerY.value)];
                 //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                    if ( completed ) {
@@ -504,12 +574,12 @@
 //                        [proxy setCenter:c];
 //                    }
 //                };
-                BASIC_POP_ATTR( animCenter );
-                [proxy.view pop_addAnimation:animCenter forKey:@"BasicAnimationCenter"];
-                
-            }
-        }
-    }
+//                BASIC_POP_ATTR( animCenter );
+//                [proxy.view pop_addAnimation:animCenter forKey:@"BasicAnimationCenter"];
+//                
+//            }
+//        }
+//    }
     
     if ( nil != zIndex ) {
         
@@ -713,6 +783,12 @@ animation.removedOnCompletion = true; \
     
     TiColor *shadowColor = [TiUtils colorValue:@"shadowColor" properties:properties def:nil];
     NSNumber *shadowOpacity = [TiUtils numberFromObject:[properties objectForKey:@"shadowOpacity"]];
+    
+    NSNumber *strokeStart = [TiUtils numberFromObject:[properties objectForKey:@"strokeStart"]];
+    NSNumber *strokeEnd = [TiUtils numberFromObject:[properties objectForKey:@"strokeEnd"]];
+    TiColor *strokeColor = [TiUtils colorValue:@"strokeColor" properties:properties def:nil];
+    TiColor *fillColor = [TiUtils colorValue:@"fillColor" properties:properties def:nil];
+    NSNumber *lineWidth = [TiUtils numberFromObject:[properties objectForKey:@"lineWidth"]];
     
     NSNumber *delay = [TiUtils numberFromObject:[properties objectForKey:@"delay"]];
     NSNumber *springBounciness = [TiUtils numberFromObject:[properties objectForKey:@"springBounciness"]];
@@ -1160,26 +1236,91 @@ animation.removedOnCompletion = true; \
         
     }
     
-    if ( nil != [properties objectForKey:@"center"] ) {
-        
-        id center = [properties objectForKey:@"center"];
-        
-        if ( [center isKindOfClass:[NSDictionary class]] ) {
+    if ( nil != proxy.view.layer.sublayers[0] &&
+         [proxy.view.layer.sublayers[0] isKindOfClass:[CAShapeLayer class]] ) {
+    
+        if ( nil != strokeStart ) {
             
-            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
-            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeStart"];
             
-            if ( !TiDimensionIsUndefined(centerX) &&
-                !TiDimensionIsUndefined(centerY) ) {
-                
-                CGFloat centerXVal = [self calcTiDimensionValue:centerX withKey:@"center.x" andProxy:proxy isDecay:NO];
-                CGFloat centerYVal = [self calcTiDimensionValue:centerY withKey:@"center.y" andProxy:proxy isDecay:NO];
-                
-                if ( centerXVal != ERR_DIMENSION && centerYVal != ERR_DIMENSION ) {
-                
-                    [proxy.view pop_removeAnimationForKey:@"SpringAnimationCenter"];
-                    POPSpringAnimation *animCenter = [POPSpringAnimation animationWithPropertyNamed:kPOPViewCenter];
-                    animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
+            POPSpringAnimation *animStrokeStart = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
+            animStrokeStart.toValue = @(strokeStart.floatValue);
+            SPRING_POP_ATTR( animStrokeStart );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"SpringAnimationStrokeStart"];
+            
+        }
+        
+        if ( nil != strokeEnd ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeEnd"];
+            
+            POPSpringAnimation *animStrokeEnd = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
+            animStrokeEnd.toValue = @(strokeEnd.floatValue);
+            SPRING_POP_ATTR( animStrokeEnd );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"SpringAnimationStrokeEnd"];
+            
+        }
+        
+        if ( nil != lineWidth ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationLineWidth"];
+            
+            POPSpringAnimation *animLineWidth = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
+            animLineWidth.toValue = @(lineWidth.floatValue);
+            SPRING_POP_ATTR( animLineWidth );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"SpringAnimationLineWidth"];
+            
+        }
+        
+        if ( nil != strokeColor ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeColor"];
+            
+            POPSpringAnimation *animStrokeColor = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeColor];
+            animStrokeColor.toValue = strokeColor.color;
+            SPRING_POP_ATTR( animStrokeColor );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeColor forKey:@"SpringAnimationStrokeColor"];
+            
+        }
+        
+        if ( nil != fillColor ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationFillColor"];
+            
+            POPSpringAnimation *animFillColor = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerFillColor];
+            animFillColor.toValue = fillColor.color;
+            SPRING_POP_ATTR( animFillColor );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animFillColor forKey:@"SpringAnimationFillColor"];
+            
+        }
+        
+    }
+    
+//    if ( nil != [properties objectForKey:@"center"] ) {
+//        
+//        id center = [properties objectForKey:@"center"];
+//        
+//        if ( [center isKindOfClass:[NSDictionary class]] ) {
+//            
+//            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
+//            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+//            
+//            if ( !TiDimensionIsUndefined(centerX) &&
+//                !TiDimensionIsUndefined(centerY) ) {
+//                
+//                CGFloat centerXVal = [self calcTiDimensionValue:centerX withKey:@"center.x" andProxy:proxy isDecay:NO];
+//                CGFloat centerYVal = [self calcTiDimensionValue:centerY withKey:@"center.y" andProxy:proxy isDecay:NO];
+//                
+//                if ( centerXVal != ERR_DIMENSION && centerYVal != ERR_DIMENSION ) {
+//                
+//                    [proxy.view pop_removeAnimationForKey:@"SpringAnimationCenter"];
+//                    POPSpringAnimation *animCenter = [POPSpringAnimation animationWithPropertyNamed:kPOPViewCenter];
+//                    animCenter.toValue = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
                 //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                    animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                        if ( completed ) {
@@ -1188,13 +1329,13 @@ animation.removedOnCompletion = true; \
 //                        }
 //                    };
                     
-                    SPRING_POP_ATTR( animCenter );
-                    [proxy.view pop_addAnimation:animCenter forKey:@"SpringAnimationCenter"];
-                    
-                }
-            }
-        }
-    }
+//                    SPRING_POP_ATTR( animCenter );
+//                    [proxy.view pop_addAnimation:animCenter forKey:@"SpringAnimationCenter"];
+//                    
+//                }
+//            }
+//        }
+//    }
     
     if ( nil != zIndex ) {
         
@@ -1387,6 +1528,10 @@ animation.removedOnCompletion = true; \
     NSNumber *borderWidth = [TiUtils numberFromObject:[properties objectForKey:@"borderWidth"]];
     
     NSNumber *shadowOpacity = [TiUtils numberFromObject:[properties objectForKey:@"shadowOpacity"]];
+    
+    NSNumber *strokeStart = [TiUtils numberFromObject:[properties objectForKey:@"strokeStart"]];
+    NSNumber *strokeEnd = [TiUtils numberFromObject:[properties objectForKey:@"strokeEnd"]];
+    NSNumber *lineWidth = [TiUtils numberFromObject:[properties objectForKey:@"lineWidth"]];
     
     NSNumber *delay = [TiUtils numberFromObject:[properties objectForKey:@"delay"]];
     NSNumber *deceleration = [TiUtils numberFromObject:[properties objectForKey:@"deceleration"]];
@@ -1831,28 +1976,69 @@ animation.removedOnCompletion = true; \
         
     }
     
-    if ( nil != [properties objectForKey:@"center"] ) {
-        
-        id center = [properties objectForKey:@"center"];
-        
-        if ( [center isKindOfClass:[NSDictionary class]] ) {
+    if ( nil != proxy.view.layer.sublayers[0] &&
+         [proxy.view.layer.sublayers[0] isKindOfClass:[CAShapeLayer class]] ) {
+    
+        if ( nil != strokeStart ) {
             
-            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
-            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeStart"];
             
-            if ( !TiDimensionIsUndefined(centerX) &&
-                 !TiDimensionIsUndefined(centerY) ) {
-                
-                CGFloat centerXVal = [self calcTiDimensionValue:centerX withKey:@"center.x" andProxy:proxy isDecay:YES];
-                CGFloat centerYVal = [self calcTiDimensionValue:centerY withKey:@"center.y" andProxy:proxy isDecay:YES];
-                
-                if ( centerXVal != ERR_DIMENSION && centerYVal != ERR_DIMENSION ) {
-                    
-                    [proxy.view pop_removeAnimationForKey:@"DecayAnimationCenter"];
-                    POPDecayAnimation *animCenter = [POPDecayAnimation animationWithPropertyNamed:kPOPViewCenter];
-                    __weak POPDecayAnimation *weakAnimCenter = animCenter;
-                    
-                    animCenter.velocity = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
+            POPDecayAnimation *animStrokeStart = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
+            animStrokeStart.toValue = @(strokeStart.floatValue);
+            DECAY_POP_ATTR( animStrokeStart );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"DecayAnimationStrokeStart"];
+            
+        }
+        
+        if ( nil != strokeEnd ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeEnd"];
+            
+            POPDecayAnimation *animStrokeEnd = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
+            animStrokeEnd.toValue = @(strokeEnd.floatValue);
+            DECAY_POP_ATTR( animStrokeEnd );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"DecayAnimationStrokeEnd"];
+            
+        }
+        
+        if ( nil != lineWidth ) {
+            
+            [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationLineWidth"];
+            
+            POPDecayAnimation *animLineWidth = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
+            animLineWidth.toValue = @(lineWidth.floatValue);
+            DECAY_POP_ATTR( animLineWidth );
+            
+            [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"DecayAnimationLineWidth"];
+            
+        }
+        
+    }
+    
+//    if ( nil != [properties objectForKey:@"center"] ) {
+//        
+//        id center = [properties objectForKey:@"center"];
+//        
+//        if ( [center isKindOfClass:[NSDictionary class]] ) {
+//            
+//            TiDimension centerX = [TiUtils dimensionValue:@"x" properties:center def:TiDimensionUndefined];
+//            TiDimension centerY = [TiUtils dimensionValue:@"y" properties:center def:TiDimensionUndefined];
+//            
+//            if ( !TiDimensionIsUndefined(centerX) &&
+//                 !TiDimensionIsUndefined(centerY) ) {
+//                
+//                CGFloat centerXVal = [self calcTiDimensionValue:centerX withKey:@"center.x" andProxy:proxy isDecay:YES];
+//                CGFloat centerYVal = [self calcTiDimensionValue:centerY withKey:@"center.y" andProxy:proxy isDecay:YES];
+//                
+//                if ( centerXVal != ERR_DIMENSION && centerYVal != ERR_DIMENSION ) {
+//                    
+//                    [proxy.view pop_removeAnimationForKey:@"DecayAnimationCenter"];
+//                    POPDecayAnimation *animCenter = [POPDecayAnimation animationWithPropertyNamed:kPOPViewCenter];
+//                    __weak POPDecayAnimation *weakAnimCenter = animCenter;
+//                    
+//                    animCenter.velocity = [NSValue valueWithCGPoint:CGPointMake(centerXVal, centerYVal)];
                 //XXX: setCenter would make our view moving back to the original position. need more debugs.
 //                    animCenter.completionBlock = ^(POPAnimation *anim, BOOL completed) {
 //                        if ( completed ) {
@@ -1860,14 +2046,14 @@ animation.removedOnCompletion = true; \
 //                            [proxy setCenter:c];
 //                        }
 //                    };
-                    DECAY_POP_ATTR( animCenter );
-                    
-                    [proxy.view pop_addAnimation:animCenter forKey:@"DecayAnimationCenter"];
-                    
-                }
-            }
-        }
-    }
+//                    DECAY_POP_ATTR( animCenter );
+//                    
+//                    [proxy.view pop_addAnimation:animCenter forKey:@"DecayAnimationCenter"];
+//                    
+//                }
+//            }
+//        }
+//    }
     
     if ( nil != shadowOpacity ) {
         
