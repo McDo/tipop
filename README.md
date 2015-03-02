@@ -68,6 +68,7 @@ The POP variable is a reference to the Module object.
 |scrollViewContentOffset<br><font color='#ccc'>Ti.UI.ScrollView</font>|scrollViewContentOffset: {|scrollViewContentOffset: {|scrollViewContentOffset: {|
 |scrollViewContentOffset.x|x:72,|x:72,|x:-155,<br><font color='#ccc'>// velocity</font>|
 |scrollViewContentOffset.y|y:-500,|y:-500,|y:188,<br><font color='#ccc'>// velocity</font>|
+||}|}|}|
 |**CAShapeLayer Animations:** ( the layer should be the first sublayer of proxy.view.layer )||||
 |***strokeStart***|strokeStart:0.5,|strokeStart:0.5,|strokeStart:-2.0,<br><font color='#ccc'>// velocity</font>|
 |***strokeEnd***|strokeEnd:1.0,|strokeEnd:1.0,|strokeEnd:2.0,<br><font color='#ccc'>// velocity</font>|
