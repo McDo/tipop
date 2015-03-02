@@ -74,7 +74,6 @@ The POP variable is a reference to the Module object.
 |***lineWidth***|lineWidth:5.0,|lineWidth:5.0,|lineWidth:-8.0,<br><font color='#ccc'>// velocity</font>|
 |***strokeColor***|strokeColor:'#5A5A5A',|strokeColor:'#5A5A5A',|\\|
 |***fillColor***|fillColor:'blue',|fillColor:'blue',|\\|
-||}|}|}|
 |===|
 |**Options**|
 |duration|duration: 1030,|\\|\\|
