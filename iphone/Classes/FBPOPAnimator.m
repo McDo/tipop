@@ -1984,7 +1984,7 @@ animation.removedOnCompletion = true; \
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeStart"];
             
             POPDecayAnimation *animStrokeStart = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
-            animStrokeStart.toValue = @(strokeStart.floatValue);
+            animStrokeStart.velocity = @(strokeStart.floatValue);
             DECAY_POP_ATTR( animStrokeStart );
             
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"DecayAnimationStrokeStart"];
@@ -1996,7 +1996,7 @@ animation.removedOnCompletion = true; \
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeEnd"];
             
             POPDecayAnimation *animStrokeEnd = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
-            animStrokeEnd.toValue = @(strokeEnd.floatValue);
+            animStrokeEnd.velocity = @(strokeEnd.floatValue);
             DECAY_POP_ATTR( animStrokeEnd );
             
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"DecayAnimationStrokeEnd"];
@@ -2008,7 +2008,7 @@ animation.removedOnCompletion = true; \
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationLineWidth"];
             
             POPDecayAnimation *animLineWidth = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
-            animLineWidth.toValue = @(lineWidth.floatValue);
+            animLineWidth.velocity = @(lineWidth.floatValue);
             DECAY_POP_ATTR( animLineWidth );
             
             [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"DecayAnimationLineWidth"];

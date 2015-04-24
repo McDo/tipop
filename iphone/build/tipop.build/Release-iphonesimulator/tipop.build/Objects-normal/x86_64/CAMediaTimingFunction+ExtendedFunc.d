@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/CAMediaTimingFunction+ExtendedFunc.m \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/CAMediaTimingFunction+ExtendedFunc.h
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/CAMediaTimingFunction+ExtendedFunc.m \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/CAMediaTimingFunction+ExtendedFunc.h

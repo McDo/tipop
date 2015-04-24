@@ -1,20 +1,20 @@
 dependencies: \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimation.mm \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationInternal.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimation.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationTracer.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationEvent.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPGeometry.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationRuntime.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPVector.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPMath.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPDefines.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationTracerInternal.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPSpringSolver.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAction.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimationExtras.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPSpringAnimation.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPPropertyAnimation.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimatableProperty.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimatorPrivate.h \
-  /Users/logicdesign/Developer/Titanium_Studio_Workspace/tipop/iphone/Classes/pop/POPAnimator.h
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimation.mm \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationInternal.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimation.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationTracer.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationEvent.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPGeometry.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationRuntime.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPVector.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPMath.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPDefines.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationTracerInternal.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPSpringSolver.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAction.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimationExtras.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPSpringAnimation.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPPropertyAnimation.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimatableProperty.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimatorPrivate.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/POPAnimator.h
