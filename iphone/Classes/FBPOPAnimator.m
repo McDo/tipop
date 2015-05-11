@@ -12,9 +12,60 @@
 
 #define ERR_DIMENSION -100000000.f
 
+typedef NS_OPTIONS(NSUInteger, TIPOPANIMATIONS) {
+    TIPOPEMPTY                      = 0,
+    
+    TIPOPLEFT                       = 1 << 0,
+    TIPOPTOP                        = 1 << 1,
+    TIPOPWIDTH                      = 1 << 2,
+    TIPOPHEIGHT                     = 1 << 3,
+    
+    TIPOPOPACITY                    = 1 << 4,
+    TIPOPZINDEX                     = 1 << 5,
+    
+    TIPOPCOLOR                      = 1 << 6,
+    TIPOPBACKGROUNDCOLOR            = 1 << 7,
+    TIPOPTINTCOLOR                  = 1 << 8,
+    
+    TIPOPBORDERRADIUS               = 1 << 9,
+    TIPOPBORDERWIDTH                = 1 << 10,
+    TIPOPBORDERCOLOR                = 1 << 11,
+    
+    TIPOPSHADOWCOLOR                = 1 << 12,
+    TIPOPSHADOWOPACITY              = 1 << 13,
+    
+    TIPOPSTROKESTART                = 1 << 14,
+    TIPOPSTROKEEND                  = 1 << 15,
+    TIPOPSTROKECOLOR                = 1 << 16,
+    TIPOPFILLCOLOR                  = 1 << 17,
+    TIPOPLINEWIDTH                  = 1 << 18,
+    
+    TIPOPROTATEX                    = 1 << 19,
+    TIPOPROTATEY                    = 1 << 20,
+    TIPOPROTATEZ                    = 1 << 21,
+    
+    TIPOPSCALEX                     = 1 << 22,
+    TIPOPSCALEY                     = 1 << 23,
+    
+    TIPOPTRANSLATEX                 = 1 << 24,
+    TIPOPTRANSLATEY                 = 1 << 25,
+    TIPOPTRANSLATEZ                 = 1 << 26,
+    
+    TIPOPSUBTRANSLATEX              = 1 << 27,
+    TIPOPSUBTRANSLATEY              = 1 << 28,
+    
+    TIPOPSCROLLVIEWCONTETNOFFSET   = 1 << 29
+};
+
+#define setAnimationMask( mask, animation ) do { mask |=  animation; } while(0)
+#define unsetAnimationMask( mask, animation ) do { mask &= (~animation); } while(0)
+#define finishAnimation( mask, callback ) do { \
+    if ( TIPOPEMPTY == mask && callback ) [callback call:nil thisObject:nil]; \
+} while(0)
+
 #pragma mark - public API
 
--(void)basicAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties {
+-(void)basicAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback {
     
 #define BASIC_POP_ATTR( animation ) do { \
     if ( nil != duration ) animation.duration = duration.floatValue / 1000.f; \
@@ -61,11 +112,15 @@
     BOOL repeatForever = [TiUtils boolValue:@"repeatForever" properties:properties def:false];
     BOOL autoreverse = [TiUtils boolValue:@"autoreverse" properties:properties def:false];
     
+    __block TIPOPANIMATIONS mask = TIPOPEMPTY;
+    
     [proxy.view setOpaque:YES];
     layoutConstraint = proxy.layoutProperties;
     [self recalcConstraint:proxy width:width height:height left:left top:top center:[properties objectForKey:@"center"]];
     
     if ( !TiDimensionIsUndefined(left) ) {
+        
+        setAnimationMask(mask, TIPOPLEFT);
         
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationPositionX"];
         
@@ -73,7 +128,9 @@
         animPositionX.toValue = @(frameCache.origin.x);
         animPositionX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPLEFT);
                 [proxy setLeft:[properties objectForKey:@"left"]];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animPositionX );
@@ -84,13 +141,17 @@
     
     if ( !TiDimensionIsUndefined(top) ) {
         
+        setAnimationMask(mask, TIPOPTOP);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationPositionY"];
         
         POPBasicAnimation *animPositionY = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
         animPositionY.toValue = @(frameCache.origin.y);
         animPositionY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPTOP);
                 [proxy setTop:[properties objectForKey:@"top"]];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animPositionY );
@@ -102,6 +163,9 @@
     if ( !TiDimensionIsUndefined(width) ||
          !TiDimensionIsUndefined(height) ) {
         
+        if ( !TiDimensionIsUndefined(width) ) setAnimationMask(mask, TIPOPWIDTH);
+        if ( !TiDimensionIsUndefined(height) ) setAnimationMask(mask, TIPOPHEIGHT);
+
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationSize"];
         POPBasicAnimation *animSize = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerSize];
         
@@ -111,7 +175,9 @@
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(frameCache.size.width, proxy.view.layer.bounds.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPWIDTH);
                     [proxy setWidth:[properties objectForKey:@"width"]];
+                    finishAnimation(mask, callback);
                 }
             };
             BASIC_POP_ATTR( animSize );
@@ -124,7 +190,9 @@
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(proxy.view.layer.bounds.size.width, frameCache.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPHEIGHT);
                     [proxy setHeight:[properties objectForKey:@"height"]];
+                    finishAnimation(mask, callback);
                 }
             };
             BASIC_POP_ATTR( animSize );
@@ -137,8 +205,11 @@
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(frameCache.size.width, frameCache.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPWIDTH);
+                    unsetAnimationMask(mask, TIPOPHEIGHT);
                     [proxy setWidth:[properties objectForKey:@"width"]];
                     [proxy setHeight:[properties objectForKey:@"height"]];
+                    finishAnimation(mask, callback);
                 }
             };
             BASIC_POP_ATTR( animSize );
@@ -150,13 +221,17 @@
     
     if ( nil != opacity ) {
         
+        setAnimationMask(mask, TIPOPOPACITY);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationOpacity"];
         
         POPBasicAnimation *animOpacity = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerOpacity];
         animOpacity.toValue = @(opacity.floatValue);
         animOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPOPACITY);
                 [proxy setValue:opacity forKey:@"opacity"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animOpacity );
@@ -167,13 +242,17 @@
     
     if ( nil != backgroundColor ) {
         
+        setAnimationMask(mask, TIPOPBACKGROUNDCOLOR);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationBackgroundColor"];
         
         POPBasicAnimation *animBackgroundColor = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
         animBackgroundColor.toValue = backgroundColor.color;
         animBackgroundColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBACKGROUNDCOLOR);
                 [proxy setValue:backgroundColor forKey:@"backgroundColor"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animBackgroundColor );
@@ -184,13 +263,17 @@
     
     if ( [proxy.view isKindOfClass:[TiUILabel class]] && nil != color ) {
         
+        setAnimationMask(mask, TIPOPCOLOR);
+        
         [[(TiUILabel *)proxy.view label] pop_removeAnimationForKey:@"BasicAnimationLabelTextColor"];
         
         POPBasicAnimation *animColor = [POPBasicAnimation animationWithPropertyNamed:kPOPLabelTextColor];
         animColor.toValue = color.color;
         animColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPCOLOR);
                 [proxy setValue:color forKey:@"color"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animColor );
@@ -200,13 +283,17 @@
     
     if ( nil != tintColor ) {
         
+        setAnimationMask(mask, TIPOPTINTCOLOR);
+        
         [proxy.view pop_removeAnimationForKey:@"BasicAnimationTintColor"];
         
         POPBasicAnimation *animTintColor = [POPBasicAnimation animationWithPropertyNamed:kPOPViewTintColor];
         animTintColor.toValue = tintColor.color;
         animTintColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPTINTCOLOR);
                 [proxy setValue:tintColor forKey:@"tintColor"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animTintColor );
@@ -217,13 +304,17 @@
     
     if ( nil != borderWidth ) {
         
+        setAnimationMask(mask, TIPOPBORDERWIDTH);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationBorderWidth"];
         
         POPBasicAnimation *animBorderWidth = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBorderWidth];
         animBorderWidth.toValue = @(borderWidth.floatValue);
         animBorderWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBORDERWIDTH);
                 [proxy setValue:borderWidth forKey:@"borderWidth"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animBorderWidth );
@@ -234,13 +325,17 @@
     
     if ( nil != borderColor ) {
         
+        setAnimationMask(mask, TIPOPBORDERCOLOR);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationBorderColor"];
         
         POPBasicAnimation *animBorderColor = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBorderColor];
         animBorderColor.toValue = borderColor.color;
         animBorderColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBORDERCOLOR);
                 [proxy setValue:borderColor forKey:@"borderColor"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animBorderColor );
@@ -251,13 +346,17 @@
     
     if ( nil != borderRadius ) {
         
+        setAnimationMask(mask, TIPOPBORDERRADIUS);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationBorderRadius"];
         
         POPBasicAnimation *animBorderRadius = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerCornerRadius];
         animBorderRadius.toValue = @(borderRadius.floatValue);
         animBorderRadius.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPBORDERRADIUS);
                 [proxy setValue:borderRadius forKey:@"borderRadius"];
+                finishAnimation(mask, callback);
             }
         };
         BASIC_POP_ATTR( animBorderRadius );
@@ -276,6 +375,10 @@
             id rotateY = [rotate objectForKey:@"y"];
             id rotateZ = [rotate objectForKey:@"z"];
             
+            if ( nil != rotateX ) setAnimationMask(mask, TIPOPROTATEX);
+            if ( nil != rotateY ) setAnimationMask(mask, TIPOPROTATEY);
+            if ( nil != rotateZ ) setAnimationMask(mask, TIPOPROTATEZ);
+            
             if ( nil != rotateX &&
                  nil == rotateY &&
                  nil == rotateZ ) {
@@ -285,7 +388,9 @@
                 animRotationX.toValue = @( degreesToRadians([rotateX doubleValue]) );
                 animRotationX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -301,7 +406,9 @@
                 animRotationY.toValue = @( degreesToRadians([rotateY doubleValue]) );
                 animRotationY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -317,7 +424,9 @@
                 animRotationZ.toValue = @( degreesToRadians([rotateZ doubleValue]) );
                 animRotationZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -335,7 +444,11 @@
                 animRotation3D.toValue = [NSValue valueWithCGRect:CGRectMake( degreesToRadians(rx), degreesToRadians(ry), degreesToRadians(rz), /* placeholder with meaningless value. suggest support 3d vector. */-1)];
                 animRotation3D.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
+                        unsetAnimationMask(mask, TIPOPROTATEY);
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -354,6 +467,9 @@
         
         if ( [scale isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [scale objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSCALEX);
+            if ( nil != [scale objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSCALEY);
+            
             if ( nil != [scale objectForKey:@"x"] &&
                  nil == [scale objectForKey:@"y"] ) {
                 
@@ -362,7 +478,9 @@
                 animScaleX.toValue = @( [[scale objectForKey:@"x"] floatValue] );
                 animScaleX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 BASIC_POP_ATTR( animScaleX );
@@ -376,7 +494,9 @@
                 animScaleY.toValue = @( [[scale objectForKey:@"y"] floatValue] );
                 animScaleY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 BASIC_POP_ATTR( animScaleY );
@@ -389,7 +509,10 @@
                 POPBasicAnimation *animScaleXY = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
                 animScaleXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 animScaleXY.toValue = [NSValue valueWithCGPoint:CGPointMake(
@@ -411,6 +534,10 @@
         
         if ( [translate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [translate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPTRANSLATEX);
+            if ( nil != [translate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPTRANSLATEY);
+            if ( nil != [translate objectForKey:@"z"] ) setAnimationMask(mask, TIPOPTRANSLATEZ);
+            
             if ( nil != [translate objectForKey:@"x"] &&
                  nil == [translate objectForKey:@"y"] ) {
                 
@@ -419,7 +546,9 @@
                 animTranslateX.toValue = @( [[translate objectForKey:@"x"] floatValue] );
                 animTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                     
@@ -434,7 +563,9 @@
                 animTranslateY.toValue = @( [[translate objectForKey:@"y"] floatValue] );
                 animTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                     
@@ -453,7 +584,10 @@
                                                                             )];
                 animTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 BASIC_POP_ATTR( animTranslateXY );
@@ -474,7 +608,9 @@
                 animTranslateZ.toValue = @( [[translate objectForKey:@"z"] floatValue] );
                 animTranslateZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -492,60 +628,100 @@
     
         if ( nil != strokeStart ) {
             
+            setAnimationMask(mask, TIPOPSTROKESTART);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeStart"];
             
             POPBasicAnimation *animStrokeStart = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
             animStrokeStart.toValue = @(strokeStart.floatValue);
-            BASIC_POP_ATTR( animStrokeStart );
+            animStrokeStart.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKESTART);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            BASIC_POP_ATTR( animStrokeStart );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"BasicAnimationStrokeStart"];
             
         }
         
         if ( nil != strokeEnd ) {
             
+            setAnimationMask(mask, TIPOPSTROKEEND);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeEnd"];
             
             POPBasicAnimation *animStrokeEnd = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
             animStrokeEnd.toValue = @(strokeEnd.floatValue);
-            BASIC_POP_ATTR( animStrokeEnd );
+            animStrokeEnd.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKEEND);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            BASIC_POP_ATTR( animStrokeEnd );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"BasicAnimationStrokeEnd"];
             
         }
         
         if ( nil != lineWidth ) {
             
+            setAnimationMask(mask, TIPOPLINEWIDTH);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationLineWidth"];
             
             POPBasicAnimation *animLineWidth = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
             animLineWidth.toValue = @(lineWidth.floatValue);
-            BASIC_POP_ATTR( animLineWidth );
+            animLineWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPLINEWIDTH);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            BASIC_POP_ATTR( animLineWidth );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"BasicAnimationLineWidth"];
             
         }
         
         if ( nil != strokeColor ) {
             
+            setAnimationMask(mask, TIPOPSTROKECOLOR);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationStrokeColor"];
             
             POPBasicAnimation *animStrokeColor = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeColor];
             animStrokeColor.toValue = strokeColor.color;
-            BASIC_POP_ATTR( animStrokeColor );
+            animStrokeColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKECOLOR);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            BASIC_POP_ATTR( animStrokeColor );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeColor forKey:@"BasicAnimationStrokeColor"];
             
         }
         
         if ( nil != fillColor ) {
             
+            setAnimationMask(mask, TIPOPFILLCOLOR);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"BasicAnimationFillColor"];
             
             POPBasicAnimation *animFillColor = [POPBasicAnimation animationWithPropertyNamed:kPOPShapeLayerFillColor];
             animFillColor.toValue = fillColor.color;
-            BASIC_POP_ATTR( animFillColor );
+            animFillColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPFILLCOLOR);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            BASIC_POP_ATTR( animFillColor );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animFillColor forKey:@"BasicAnimationFillColor"];
             
         }
@@ -583,22 +759,28 @@
     
     if ( nil != zIndex ) {
         
+        setAnimationMask(mask, TIPOPZINDEX);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationZIndex"];
         
         POPBasicAnimation *animZIndex = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerZPosition];
         animZIndex.toValue = @(zIndex.intValue);
         animZIndex.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPZINDEX);
                 [proxy setZIndex:zIndex];
+                finishAnimation(mask, callback);
             }
         };
+
         BASIC_POP_ATTR( animZIndex );
-        
         [proxy.view.layer pop_addAnimation:animZIndex forKey:@"BasicAnimationZIndex"];
         
     }
     
     if ( nil != shadowColor ) {
+        
+        setAnimationMask(mask, TIPOPSHADOWCOLOR);
         
         [proxy.view.shadowLayer pop_removeAnimationForKey:@"BasicAnimationShadowColor"];
         
@@ -606,30 +788,34 @@
         animShadowColor.toValue = shadowColor.color;
         animShadowColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPSHADOWCOLOR);
                 [proxy setValue:shadowColor forKey:@"viewShadowColor"];
+                finishAnimation(mask, callback);
             }
         };
-        BASIC_POP_ATTR( animShadowColor );
         
+        BASIC_POP_ATTR( animShadowColor );
         [proxy.view.shadowLayer pop_addAnimation:animShadowColor forKey:@"BasicAnimationShadowColor"];
         
     }
     
     if ( nil != shadowOpacity ) {
         
+        setAnimationMask(mask, TIPOPSHADOWOPACITY);
+        
         [proxy.view.shadowLayer pop_removeAnimationForKey:@"BasicAnimationShadowOpacity"];
         
         POPBasicAnimation *animShadowOpacity = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerShadowOpacity];
         animShadowOpacity.toValue = @(shadowOpacity.floatValue);
-        
-//        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
-//            if (completed) {
-//                [proxy setValue:shadowColor forKey:@"viewShadowOpacity"];
-//            }
-//        };
+        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+            if (completed) {
+                unsetAnimationMask(mask, TIPOPSHADOWOPACITY);
+                [proxy setValue:shadowOpacity forKey:@"viewShadowOpacity"];
+                finishAnimation(mask, callback);
+            }
+        };
         
         BASIC_POP_ATTR( animShadowOpacity );
-        
         [proxy.view.shadowLayer pop_addAnimation:animShadowOpacity forKey:@"BasicAnimationShadowOpacity"];
         
     }
@@ -640,12 +826,22 @@
         
         if ( [subTranslate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [subTranslate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEX);
+            if ( nil != [subTranslate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEY);
+            
             if ( nil != [subTranslate objectForKey:@"x"] &&
                  nil == [subTranslate objectForKey:@"y"] ) {
                 
                 [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationSubTranslateX"];
                 POPBasicAnimation *animSubTranslateX = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerSubtranslationX];
                 animSubTranslateX.toValue = @( [[subTranslate objectForKey:@"x"] floatValue] );
+                animSubTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 BASIC_POP_ATTR( animSubTranslateX );
                 [proxy.view.layer pop_addAnimation:animSubTranslateX forKey:@"BasicAnimationSubTranslateX"];
                 
@@ -655,6 +851,13 @@
                 [proxy.view.layer pop_removeAnimationForKey:@"BasicAnimationSubTranslateY"];
                 POPBasicAnimation *animSubTranslateY = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerSubtranslationY];
                 animSubTranslateY.toValue = @( [[subTranslate objectForKey:@"y"] floatValue] );
+                animSubTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 BASIC_POP_ATTR( animSubTranslateY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateY forKey:@"BasicAnimationSubTranslateY"];
                 
@@ -667,6 +870,14 @@
                                                                             [[subTranslate objectForKey:@"x"] floatValue],
                                                                             [[subTranslate objectForKey:@"y"] floatValue]
                                                                             )];
+                animSubTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 BASIC_POP_ATTR( animSubTranslateXY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateXY forKey:@"BasicAnimationSubTranslateXY"];
                 
@@ -699,6 +910,10 @@
             
             if ( [scrollViewContentOffset isKindOfClass:[NSDictionary class]] ) {
                 
+                if ( nil != [scrollViewContentOffset objectForKey:@"x"]
+                    || nil != [scrollViewContentOffset objectForKey:@"y"] )
+                    setAnimationMask(mask, TIPOPSCROLLVIEWCONTETNOFFSET);
+                
                 float x = ( nil != [scrollViewContentOffset objectForKey:@"x"] ) ?
                           [[scrollViewContentOffset objectForKey:@"x"] floatValue] : 0.f;
                 
@@ -708,6 +923,13 @@
                 [[(TiUIScrollView *)proxy.view scrollView] pop_removeAnimationForKey:@"BasicAnimationScrollViewContentOffset"];
                 POPBasicAnimation *animScrollViewContentOffset = [POPBasicAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
                 animScrollViewContentOffset.toValue = [NSValue valueWithCGPoint:CGPointMake(x, y)];
+                animScrollViewContentOffset.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCROLLVIEWCONTETNOFFSET);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 BASIC_POP_ATTR( animScrollViewContentOffset );
                 [[(TiUIScrollView *)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"BasicAnimationScrollViewContentOffset"];
                 
@@ -749,20 +971,20 @@
     
 }
 
--(void)springAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties {
+-(void)springAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback {
     
 #define SPRING_POP_ATTR( animation ) do { \
-if ( nil != delay ) animation.beginTime = CACurrentMediaTime() + ( delay.floatValue / 1000.f ); \
-if ( nil != springBounciness ) animation.springBounciness = springBounciness.floatValue; \
-if ( nil != springSpeed ) animation.springSpeed = springSpeed.floatValue; \
-if ( nil != tension ) animation.dynamicsTension = tension.floatValue; \
-if ( nil != friction ) animation.dynamicsFriction = friction.floatValue; \
-if ( nil != mass ) animation.dynamicsMass = mass.floatValue; \
-if ( nil != repeatCount ) animation.repeatCount = repeatCount.integerValue; \
-animation.repeatForever = repeatForever; \
-animation.additive = addictive; \
-animation.autoreverses = autoreverse; \
-animation.removedOnCompletion = true; \
+    if ( nil != delay ) animation.beginTime = CACurrentMediaTime() + ( delay.floatValue / 1000.f ); \
+    if ( nil != springBounciness ) animation.springBounciness = springBounciness.floatValue; \
+    if ( nil != springSpeed ) animation.springSpeed = springSpeed.floatValue; \
+    if ( nil != tension ) animation.dynamicsTension = tension.floatValue; \
+    if ( nil != friction ) animation.dynamicsFriction = friction.floatValue; \
+    if ( nil != mass ) animation.dynamicsMass = mass.floatValue; \
+    if ( nil != repeatCount ) animation.repeatCount = repeatCount.integerValue; \
+    animation.repeatForever = repeatForever; \
+    animation.additive = addictive; \
+    animation.autoreverses = autoreverse; \
+    animation.removedOnCompletion = true; \
 } while(0)
     
     TiDimension left = [TiUtils dimensionValue:@"left" properties:properties def:TiDimensionUndefined];
@@ -802,6 +1024,8 @@ animation.removedOnCompletion = true; \
     BOOL repeatForever = [TiUtils boolValue:@"repeatForever" properties:properties def:false];
     BOOL autoreverse = [TiUtils boolValue:@"autoreverse" properties:properties def:false];
     
+    __block TIPOPANIMATIONS mask = TIPOPEMPTY;
+    
     // set opaque to YES to gain more performance.
     [proxy.view setOpaque:YES];
     layoutConstraint = proxy.layoutProperties;
@@ -809,13 +1033,17 @@ animation.removedOnCompletion = true; \
     
     if ( !TiDimensionIsUndefined(left) ) {
         
+        setAnimationMask(mask, TIPOPLEFT);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationPositionX"];
         
         POPSpringAnimation *animPositionX = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionX];
         animPositionX.toValue = @(frameCache.origin.x);
         animPositionX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPLEFT);
                 [proxy setLeft:[properties objectForKey:@"left"]];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animPositionX );
@@ -826,13 +1054,17 @@ animation.removedOnCompletion = true; \
     
     if ( !TiDimensionIsUndefined(top) ) {
         
+        setAnimationMask(mask, TIPOPTOP);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationPositionY"];
         
         POPSpringAnimation *animPositionY = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
         animPositionY.toValue = @(frameCache.origin.y);
         animPositionY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPTOP);
                 [proxy setTop:[properties objectForKey:@"top"]];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animPositionY );
@@ -844,6 +1076,9 @@ animation.removedOnCompletion = true; \
     if ( !TiDimensionIsUndefined(width) ||
          !TiDimensionIsUndefined(height) ) {
         
+        if ( !TiDimensionIsUndefined(width) ) setAnimationMask(mask, TIPOPWIDTH);
+        if ( !TiDimensionIsUndefined(height) ) setAnimationMask(mask, TIPOPHEIGHT);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationSize"];
         POPSpringAnimation *animSize = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerSize];
         
@@ -853,7 +1088,9 @@ animation.removedOnCompletion = true; \
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(frameCache.size.width, proxy.view.layer.bounds.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPWIDTH);
                     [proxy setWidth:[properties objectForKey:@"width"]];
+                    finishAnimation(mask, callback);
                 }
             };
             
@@ -866,7 +1103,9 @@ animation.removedOnCompletion = true; \
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(proxy.view.layer.bounds.size.width, frameCache.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPHEIGHT);
                     [proxy setHeight:[properties objectForKey:@"height"]];
+                    finishAnimation(mask, callback);
                 }
             };
             
@@ -879,8 +1118,11 @@ animation.removedOnCompletion = true; \
             animSize.toValue = [NSValue valueWithCGSize:CGSizeMake(frameCache.size.width, frameCache.size.height)];
             animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPWIDTH);
+                    unsetAnimationMask(mask, TIPOPHEIGHT);
                     [proxy setWidth:[properties objectForKey:@"width"]];
                     [proxy setHeight:[properties objectForKey:@"height"]];
+                    finishAnimation(mask, callback);
                 }
             };
             
@@ -893,13 +1135,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != opacity ) {
         
+        setAnimationMask(mask, TIPOPOPACITY);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationOpacity"];
         
         POPSpringAnimation *animOpaticy = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerOpacity];
         animOpaticy.toValue = @(opacity.floatValue);
         animOpaticy.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPOPACITY);
                 [proxy setValue:opacity forKey:@"opacity"];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animOpaticy );
@@ -910,13 +1156,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != backgroundColor ) {
         
+        setAnimationMask(mask, TIPOPBACKGROUNDCOLOR);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationBackgroundColor"];
         
         POPSpringAnimation *animBackgroundColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
         animBackgroundColor.toValue = backgroundColor.color;
         animBackgroundColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBACKGROUNDCOLOR);
                 [proxy setValue:backgroundColor forKey:@"backgroundColor"];
+                finishAnimation(mask, callback);
             }
         };
         
@@ -927,13 +1177,17 @@ animation.removedOnCompletion = true; \
     
     if ( [proxy.view isKindOfClass:[TiUILabel class]] && nil != color ) {
         
+        setAnimationMask(mask, TIPOPCOLOR);
+        
         [[(TiUILabel *)proxy.view label] pop_removeAnimationForKey:@"SpringAnimationLabelTextColor"];
         
         POPSpringAnimation *animColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLabelTextColor];
         animColor.toValue = color.color;
         animColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPCOLOR);
                 [proxy setValue:color forKey:@"color"];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animColor );
@@ -944,13 +1198,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != tintColor ) {
         
+        setAnimationMask(mask, TIPOPTINTCOLOR);
+        
         [proxy.view pop_removeAnimationForKey:@"SpringAnimationTintColor"];
         
         POPSpringAnimation *animTintColor = [POPSpringAnimation animationWithPropertyNamed:kPOPViewTintColor];
         animTintColor.toValue = tintColor.color;
         animTintColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPTINTCOLOR);
                 [proxy setValue:tintColor forKey:@"tintColor"];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animTintColor );
@@ -961,13 +1219,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != borderWidth ) {
         
+        setAnimationMask(mask, TIPOPBORDERWIDTH);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationBorderWidth"];
         
         POPSpringAnimation *animBorderWidth = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBorderWidth];
         animBorderWidth.toValue = @(borderWidth.floatValue);
         animBorderWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBORDERWIDTH);
                 [proxy setValue:borderWidth forKey:@"borderWidth"];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animBorderWidth );
@@ -978,13 +1240,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != borderColor ) {
         
+        setAnimationMask(mask, TIPOPBORDERCOLOR);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationBorderColor"];
         
         POPSpringAnimation *animBorderColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBorderColor];
         animBorderColor.toValue = borderColor.color;
         animBorderColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBORDERCOLOR);
                 [proxy setValue:borderColor forKey:@"borderColor"];
+                finishAnimation(mask, callback);
             }
         };
         SPRING_POP_ATTR( animBorderColor );
@@ -995,13 +1261,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != borderRadius ) {
         
+        setAnimationMask(mask, TIPOPBORDERRADIUS);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationBorderRadius"];
         
         POPSpringAnimation *animBorderRadius = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerCornerRadius];
         animBorderRadius.toValue = @(borderRadius.floatValue);
         animBorderRadius.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPBORDERRADIUS);
                 [proxy setValue:borderRadius forKey:@"borderRadius"];
+                finishAnimation(mask, callback);
             }
         };
         
@@ -1020,6 +1290,10 @@ animation.removedOnCompletion = true; \
             id rotateY = [rotate objectForKey:@"y"];
             id rotateZ = [rotate objectForKey:@"z"];
             
+            if ( nil != rotateX ) setAnimationMask(mask, TIPOPROTATEX);
+            if ( nil != rotateY ) setAnimationMask(mask, TIPOPROTATEY);
+            if ( nil != rotateZ ) setAnimationMask(mask, TIPOPROTATEZ);
+            
             if ( nil != rotateX &&
                  nil == rotateY &&
                  nil == rotateZ ) {
@@ -1029,7 +1303,9 @@ animation.removedOnCompletion = true; \
                 animRotationX.toValue = @( degreesToRadians([rotateX doubleValue]) );
                 animRotationX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1045,7 +1321,9 @@ animation.removedOnCompletion = true; \
                 animRotationY.toValue = @( degreesToRadians([rotateY doubleValue]) );
                 animRotationY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1061,7 +1339,9 @@ animation.removedOnCompletion = true; \
                 animRotationZ.toValue = @( degreesToRadians([rotateZ doubleValue]) );
                 animRotationZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1079,7 +1359,11 @@ animation.removedOnCompletion = true; \
                 animRotation3D.toValue = [NSValue valueWithCGRect:CGRectMake( degreesToRadians(rx), degreesToRadians(ry), degreesToRadians(rz), /* placeholder with meaningless value. suggest support 3d vector. */-1)];
                 animRotation3D.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
+                        unsetAnimationMask(mask, TIPOPROTATEY);
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1098,6 +1382,9 @@ animation.removedOnCompletion = true; \
         
         if ( [scale isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [scale objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSCALEX);
+            if ( nil != [scale objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSCALEY);
+            
             if ( nil != [scale objectForKey:@"x"] &&
                  nil == [scale objectForKey:@"y"] ) {
                 
@@ -1106,7 +1393,9 @@ animation.removedOnCompletion = true; \
                 animScaleX.toValue = @( [[scale objectForKey:@"x"] floatValue] );
                 animScaleX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1121,7 +1410,9 @@ animation.removedOnCompletion = true; \
                 animScaleY.toValue = @( [[scale objectForKey:@"y"] floatValue] );
                 animScaleY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1139,7 +1430,10 @@ animation.removedOnCompletion = true; \
                                                                             )];
                 animScaleXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1158,6 +1452,10 @@ animation.removedOnCompletion = true; \
         
         if ( [translate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [translate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPTRANSLATEX);
+            if ( nil != [translate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPTRANSLATEY);
+            if ( nil != [translate objectForKey:@"z"] ) setAnimationMask(mask, TIPOPTRANSLATEZ);
+            
             if ( nil != [translate objectForKey:@"x"] &&
                  nil == [translate objectForKey:@"y"] ) {
                 
@@ -1166,7 +1464,9 @@ animation.removedOnCompletion = true; \
                 animTranslateX.toValue = @( [[translate objectForKey:@"x"] floatValue] );
                 animTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1181,7 +1481,9 @@ animation.removedOnCompletion = true; \
                 animTranslateY.toValue = @( [[translate objectForKey:@"y"] floatValue] );
                 animTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1199,7 +1501,10 @@ animation.removedOnCompletion = true; \
                                                                             )];
                 animTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                     
@@ -1223,7 +1528,9 @@ animation.removedOnCompletion = true; \
                 animTranslateZ.toValue = @( [[translate objectForKey:@"z"] floatValue] );
                 animTranslateZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 
@@ -1241,60 +1548,100 @@ animation.removedOnCompletion = true; \
     
         if ( nil != strokeStart ) {
             
+            setAnimationMask(mask, TIPOPSTROKESTART);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeStart"];
             
             POPSpringAnimation *animStrokeStart = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
             animStrokeStart.toValue = @(strokeStart.floatValue);
-            SPRING_POP_ATTR( animStrokeStart );
+            animStrokeStart.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKESTART);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            SPRING_POP_ATTR( animStrokeStart );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"SpringAnimationStrokeStart"];
             
         }
         
         if ( nil != strokeEnd ) {
             
+            setAnimationMask(mask, TIPOPSTROKEEND);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeEnd"];
             
             POPSpringAnimation *animStrokeEnd = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
             animStrokeEnd.toValue = @(strokeEnd.floatValue);
-            SPRING_POP_ATTR( animStrokeEnd );
+            animStrokeEnd.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKEEND);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            SPRING_POP_ATTR( animStrokeEnd );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"SpringAnimationStrokeEnd"];
             
         }
         
         if ( nil != lineWidth ) {
             
+            setAnimationMask(mask, TIPOPLINEWIDTH);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationLineWidth"];
             
             POPSpringAnimation *animLineWidth = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
             animLineWidth.toValue = @(lineWidth.floatValue);
-            SPRING_POP_ATTR( animLineWidth );
+            animLineWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPLINEWIDTH);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            SPRING_POP_ATTR( animLineWidth );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"SpringAnimationLineWidth"];
             
         }
         
         if ( nil != strokeColor ) {
             
+            setAnimationMask(mask, TIPOPSTROKECOLOR);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationStrokeColor"];
             
             POPSpringAnimation *animStrokeColor = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeColor];
             animStrokeColor.toValue = strokeColor.color;
-            SPRING_POP_ATTR( animStrokeColor );
+            animStrokeColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKECOLOR);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            SPRING_POP_ATTR( animStrokeColor );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeColor forKey:@"SpringAnimationStrokeColor"];
             
         }
         
         if ( nil != fillColor ) {
             
+            setAnimationMask(mask, TIPOPFILLCOLOR);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"SpringAnimationFillColor"];
             
             POPSpringAnimation *animFillColor = [POPSpringAnimation animationWithPropertyNamed:kPOPShapeLayerFillColor];
             animFillColor.toValue = fillColor.color;
-            SPRING_POP_ATTR( animFillColor );
+            animFillColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPFILLCOLOR);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            SPRING_POP_ATTR( animFillColor );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animFillColor forKey:@"SpringAnimationFillColor"];
             
         }
@@ -1339,13 +1686,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != zIndex ) {
         
+        setAnimationMask(mask, TIPOPZINDEX);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationZIndex"];
         
         POPSpringAnimation *animZIndex = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerZPosition];
         animZIndex.toValue = @(zIndex.intValue);
         animZIndex.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPZINDEX);
                 [proxy setZIndex:zIndex];
+                finishAnimation(mask, callback);
             }
         };
         
@@ -1356,13 +1707,17 @@ animation.removedOnCompletion = true; \
     
     if ( nil != shadowColor ) {
         
+        setAnimationMask(mask, TIPOPSHADOWCOLOR);
+        
         [proxy.view.shadowLayer pop_removeAnimationForKey:@"SpringAnimationShadowColor"];
         
         POPSpringAnimation *animShadowColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerShadowColor];
         animShadowColor.toValue = shadowColor.color;
         animShadowColor.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPSHADOWCOLOR);
                 [proxy setValue:shadowColor forKey:@"viewShadowColor"];
+                finishAnimation(mask, callback);
             }
         };
         
@@ -1373,15 +1728,18 @@ animation.removedOnCompletion = true; \
     
     if ( nil != shadowOpacity ) {
         
+        setAnimationMask(mask, TIPOPSHADOWOPACITY);
+        
         [proxy.view.shadowLayer pop_removeAnimationForKey:@"SpringAnimationShadowOpacity"];
         POPSpringAnimation *animShadowOpacity = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerShadowOpacity];
         animShadowOpacity.toValue = @(shadowOpacity.floatValue);
-        
-//        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
-//            if (completed) {
-//                [proxy setValue:shadowColor forKey:@"viewShadowOpacity"];
-//            }
-//        };
+        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+            if (completed) {
+                unsetAnimationMask(mask, TIPOPSHADOWOPACITY);
+                [proxy setValue:shadowOpacity forKey:@"viewShadowOpacity"];
+                finishAnimation(mask, callback);
+            }
+        };
         
         SPRING_POP_ATTR( animShadowOpacity );
         [proxy.view.shadowLayer pop_addAnimation:animShadowOpacity forKey:@"SpringAnimationShadowOpacity"];
@@ -1394,12 +1752,22 @@ animation.removedOnCompletion = true; \
         
         if ( [subTranslate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [subTranslate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEX);
+            if ( nil != [subTranslate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEY);
+            
             if ( nil != [subTranslate objectForKey:@"x"] &&
                  nil == [subTranslate objectForKey:@"y"] ) {
                 
                 [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationSubTranslateX"];
                 POPSpringAnimation *animSubTranslateX = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerSubtranslationX];
                 animSubTranslateX.toValue = @( [[subTranslate objectForKey:@"x"] floatValue] );
+                animSubTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 SPRING_POP_ATTR( animSubTranslateX );
                 [proxy.view.layer pop_addAnimation:animSubTranslateX forKey:@"SpringAnimationSubTranslateX"];
                 
@@ -1409,6 +1777,13 @@ animation.removedOnCompletion = true; \
                 [proxy.view.layer pop_removeAnimationForKey:@"SpringAnimationSubTranslateY"];
                 POPSpringAnimation *animSubTranslateY = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerSubtranslationY];
                 animSubTranslateY.toValue = @( [[subTranslate objectForKey:@"y"] floatValue] );
+                animSubTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 SPRING_POP_ATTR( animSubTranslateY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateY forKey:@"SpringAnimationSubTranslateY"];
                 
@@ -1421,6 +1796,14 @@ animation.removedOnCompletion = true; \
                                                                             [[subTranslate objectForKey:@"x"] floatValue],
                                                                             [[subTranslate objectForKey:@"y"] floatValue]
                                                                             )];
+                animSubTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 SPRING_POP_ATTR( animSubTranslateXY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateXY forKey:@"SpringAnimationSubTranslateXY"];
                 
@@ -1463,8 +1846,14 @@ animation.removedOnCompletion = true; \
                 
                 POPSpringAnimation *animScrollViewContentOffset = [POPSpringAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
                 animScrollViewContentOffset.toValue = [NSValue valueWithCGPoint:CGPointMake(x, y)];
-                SPRING_POP_ATTR( animScrollViewContentOffset );
+                animScrollViewContentOffset.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCROLLVIEWCONTETNOFFSET);
+                        finishAnimation(mask, callback);
+                    }
+                };
                 
+                SPRING_POP_ATTR( animScrollViewContentOffset );
                 [[(TiUIScrollView *)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"SpringAnimationScrollViewContentOffset"];
                 
             }
@@ -1506,15 +1895,15 @@ animation.removedOnCompletion = true; \
 }
 
 
--(void)decayAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties {
+-(void)decayAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback {
     
 #define DECAY_POP_ATTR( animation ) do { \
-if ( nil != delay ) animation.beginTime = CACurrentMediaTime() + ( delay.floatValue / 1000.f ); \
-if ( nil != repeatCount ) animation.repeatCount = repeatCount.integerValue; \
-if ( nil != deceleration ) animation.deceleration = deceleration.floatValue; \
-animation.repeatForever = repeatForever; \
-animation.additive = addictive; \
-animation.removedOnCompletion = true; \
+    if ( nil != delay ) animation.beginTime = CACurrentMediaTime() + ( delay.floatValue / 1000.f ); \
+    if ( nil != repeatCount ) animation.repeatCount = repeatCount.integerValue; \
+    if ( nil != deceleration ) animation.deceleration = deceleration.floatValue; \
+    animation.repeatForever = repeatForever; \
+    animation.additive = addictive; \
+    animation.removedOnCompletion = true; \
 } while(0)
     
     TiDimension left = [TiUtils dimensionValue:@"left" properties:properties def:TiDimensionUndefined];
@@ -1541,11 +1930,14 @@ animation.removedOnCompletion = true; \
     BOOL repeatForever = [TiUtils boolValue:@"repeatForever" properties:properties def:false];
     BOOL autoreverse = [TiUtils boolValue:@"autoreverse" properties:properties def:false];
     
+    __block TIPOPANIMATIONS mask = TIPOPEMPTY;
+    
     // set opaque to YES to gain more performance.
     [proxy.view setOpaque:YES];
     
-    
     if ( !TiDimensionIsUndefined(left) ) {
+        
+        setAnimationMask(mask, TIPOPLEFT);
         
         CGFloat leftVal = [self calcTiDimensionValue:left withKey:@"left" andProxy:proxy isDecay:YES];
         
@@ -1559,7 +1951,9 @@ animation.removedOnCompletion = true; \
             animPositionX.velocity = @(leftVal);
             animPositionX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPLEFT);
                     [proxy replaceValue:weakAnimPositionX.toValue forKey:@"left" notification:NO];
+                    finishAnimation(mask, callback);
                 }
             };
             DECAY_POP_ATTR( animPositionX );
@@ -1572,6 +1966,8 @@ animation.removedOnCompletion = true; \
     
     if ( !TiDimensionIsUndefined(top) ) {
         
+        setAnimationMask(mask, TIPOPTOP);
+        
         CGFloat topVal = [self calcTiDimensionValue:top withKey:@"top" andProxy:proxy isDecay:YES];
         
         if ( ERR_DIMENSION != topVal ) {
@@ -1583,7 +1979,9 @@ animation.removedOnCompletion = true; \
             animPositionY.velocity = @(topVal);
             animPositionY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                 if ( completed ) {
+                    unsetAnimationMask(mask, TIPOPTOP);
                     [proxy replaceValue:weakAnimPositoinY.toValue forKey:@"top" notification:NO];
+                    finishAnimation(mask, callback);
                 }
             };
             DECAY_POP_ATTR( animPositionY );
@@ -1596,6 +1994,9 @@ animation.removedOnCompletion = true; \
     
     if ( !TiDimensionIsUndefined(width) ||
          !TiDimensionIsUndefined(height) ) {
+        
+        if ( !TiDimensionIsUndefined(width) ) setAnimationMask(mask, TIPOPWIDTH);
+        if ( !TiDimensionIsUndefined(height) ) setAnimationMask(mask, TIPOPHEIGHT);
         
         [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationSize"];
         POPDecayAnimation *animSize = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerSize];
@@ -1611,7 +2012,9 @@ animation.removedOnCompletion = true; \
                 animSize.velocity = [NSValue valueWithCGSize:CGSizeMake(widthVal, 0)];
                 animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if ( completed ) {
+                        unsetAnimationMask(mask, TIPOPWIDTH);
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].width) forKey:@"width" notification:NO];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animSize );
@@ -1629,7 +2032,9 @@ animation.removedOnCompletion = true; \
                 animSize.velocity = [NSValue valueWithCGSize:CGSizeMake(0, heightVal)];
                 animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if ( completed ) {
+                        unsetAnimationMask(mask, TIPOPHEIGHT);
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].height) forKey:@"height" notification:NO];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animSize );
@@ -1649,7 +2054,10 @@ animation.removedOnCompletion = true; \
                 animSize.velocity = [NSValue valueWithCGSize:CGSizeMake(wVal, 0)];
                 animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if ( completed ) {
+                        unsetAnimationMask(mask, TIPOPWIDTH);
+                        unsetAnimationMask(mask, TIPOPHEIGHT);
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].width) forKey:@"width" notification:NO];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animSize );
@@ -1661,7 +2069,10 @@ animation.removedOnCompletion = true; \
                 animSize.velocity = [NSValue valueWithCGSize:CGSizeMake(0, hVal)];
                 animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if ( completed ) {
+                        unsetAnimationMask(mask, TIPOPWIDTH);
+                        unsetAnimationMask(mask, TIPOPHEIGHT);
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].height) forKey:@"height" notification:NO];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animSize );
@@ -1673,8 +2084,11 @@ animation.removedOnCompletion = true; \
                 animSize.velocity = [NSValue valueWithCGSize:CGSizeMake(wVal, hVal)];
                 animSize.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if ( completed ) {
+                        unsetAnimationMask(mask, TIPOPWIDTH);
+                        unsetAnimationMask(mask, TIPOPHEIGHT);
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].width) forKey:@"width" notification:NO];
                         [proxy replaceValue:@([weakAnimSize.toValue CGSizeValue].height) forKey:@"height" notification:NO];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animSize );
@@ -1688,6 +2102,8 @@ animation.removedOnCompletion = true; \
     
     if ( nil != opacity ) {
         
+        setAnimationMask(mask, TIPOPOPACITY);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationOpacity"];
         POPDecayAnimation *animOpaticy = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerOpacity];
         __weak POPDecayAnimation *weakAnimOpacity = animOpaticy;
@@ -1695,7 +2111,9 @@ animation.removedOnCompletion = true; \
         animOpaticy.velocity = @(opacity.floatValue);
         animOpaticy.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPOPACITY);
                 [proxy setValue:weakAnimOpacity.toValue forKey:@"opacity"];
+                finishAnimation(mask, callback);
             }
         };
         DECAY_POP_ATTR( animOpaticy );
@@ -1706,6 +2124,8 @@ animation.removedOnCompletion = true; \
     
     if ( nil != borderWidth ) {
         
+        setAnimationMask(mask, TIPOPBORDERWIDTH);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationBorderWidth"];
         POPDecayAnimation *animBorderWidth = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerBorderWidth];
         __weak POPDecayAnimation *weakAnimBorderWidth = animBorderWidth;
@@ -1713,7 +2133,9 @@ animation.removedOnCompletion = true; \
         animBorderWidth.velocity = @(borderWidth.floatValue);
         animBorderWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if ( completed ) {
+                unsetAnimationMask(mask, TIPOPBORDERWIDTH);
                 [proxy setValue:weakAnimBorderWidth.toValue forKey:@"borderWidth"];
+                finishAnimation(mask, callback);
             }
         };
         DECAY_POP_ATTR( animBorderWidth );
@@ -1724,6 +2146,8 @@ animation.removedOnCompletion = true; \
     
     if ( nil != borderRadius ) {
         
+        setAnimationMask(mask, TIPOPBORDERRADIUS);
+        
         [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationBorderRadius"];
         POPDecayAnimation *animBorderRadius = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerCornerRadius];
         __weak POPDecayAnimation *weakAnimBorderRadius = animBorderRadius;
@@ -1731,7 +2155,9 @@ animation.removedOnCompletion = true; \
         animBorderRadius.velocity = @(borderRadius.floatValue);
         animBorderRadius.completionBlock = ^(POPAnimation *anim, BOOL completed) {
             if (completed) {
+                unsetAnimationMask(mask, TIPOPBORDERRADIUS);
                 [proxy setValue:weakAnimBorderRadius.toValue forKey:@"borderRadius"];
+                finishAnimation(mask, callback);
             }
         };
         DECAY_POP_ATTR( animBorderRadius );
@@ -1750,6 +2176,10 @@ animation.removedOnCompletion = true; \
             id rotateY = [rotate objectForKey:@"y"];
             id rotateZ = [rotate objectForKey:@"z"];
             
+            if ( nil != rotateX ) setAnimationMask(mask, TIPOPROTATEX);
+            if ( nil != rotateY ) setAnimationMask(mask, TIPOPROTATEY);
+            if ( nil != rotateZ ) setAnimationMask(mask, TIPOPROTATEZ);
+            
             if ( nil != rotateX &&
                  nil == rotateY &&
                  nil == rotateZ ) {
@@ -1760,7 +2190,9 @@ animation.removedOnCompletion = true; \
                 animRotationX.velocity = @( degreesToRadians([rotateX doubleValue]) );
                 animRotationX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animRotationX );
@@ -1777,7 +2209,9 @@ animation.removedOnCompletion = true; \
                 animRotationY.velocity = @( degreesToRadians([rotateY doubleValue]) );
                 animRotationY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animRotationY );
@@ -1794,7 +2228,9 @@ animation.removedOnCompletion = true; \
                 animRotationZ.velocity = @( degreesToRadians([rotateZ doubleValue]) );
                 animRotationZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animRotationZ );
@@ -1813,7 +2249,11 @@ animation.removedOnCompletion = true; \
                 animRotation3D.velocity = [NSValue valueWithCGRect:CGRectMake( degreesToRadians(rx), degreesToRadians(ry), degreesToRadians(rz), /* placeholder with meaningless value. suggest support 3d vector. */-1)];
                 animRotation3D.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPROTATEX);
+                        unsetAnimationMask(mask, TIPOPROTATEY);
+                        unsetAnimationMask(mask, TIPOPROTATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animRotation3D );
@@ -1835,13 +2275,18 @@ animation.removedOnCompletion = true; \
             if ( nil != [scale objectForKey:@"x"] &&
                  nil == [scale objectForKey:@"y"] ) {
                 
+                if ( nil != [scale objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSCALEX);
+                if ( nil != [scale objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSCALEY);
+                
                 [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationScaleX"];
                 POPDecayAnimation *animScaleX = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerScaleX];
                 
                 animScaleX.velocity = @( [[scale objectForKey:@"x"] floatValue] );
                 animScaleX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animScaleX );
@@ -1857,7 +2302,9 @@ animation.removedOnCompletion = true; \
                 animScaleY.velocity = @( [[scale objectForKey:@"y"] floatValue] );
                 animScaleY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animScaleY );
@@ -1876,7 +2323,10 @@ animation.removedOnCompletion = true; \
                                                                             )];
                 animScaleXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPSCALEX);
+                        unsetAnimationMask(mask, TIPOPSCALEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animScaleXY );
@@ -1895,6 +2345,10 @@ animation.removedOnCompletion = true; \
         
         if ( [translate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [translate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPTRANSLATEX);
+            if ( nil != [translate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPTRANSLATEY);
+            if ( nil != [translate objectForKey:@"z"] ) setAnimationMask(mask, TIPOPTRANSLATEZ);
+            
             if ( nil != [translate objectForKey:@"x"] &&
                  nil == [translate objectForKey:@"y"] ) {
                 
@@ -1904,7 +2358,9 @@ animation.removedOnCompletion = true; \
                 animTranslateX.velocity = @( [[translate objectForKey:@"x"] floatValue] );
                 animTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animTranslateX );
@@ -1920,7 +2376,9 @@ animation.removedOnCompletion = true; \
                 animTranslateY.velocity = @( [[translate objectForKey:@"y"] floatValue] );
                 animTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animTranslateY );
@@ -1939,7 +2397,10 @@ animation.removedOnCompletion = true; \
                                                                             )];
                 animTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPTRANSLATEY);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animTranslateXY );
@@ -1963,7 +2424,9 @@ animation.removedOnCompletion = true; \
                 animTranslateZ.velocity = @( [[translate objectForKey:@"z"] floatValue] );
                 animTranslateZ.completionBlock = ^(POPAnimation *anim, BOOL completed) {
                     if (completed) {
+                        unsetAnimationMask(mask, TIPOPTRANSLATEZ);
                         [proxy.view setTransform_:[[Ti3DMatrix alloc] initWithMatrix:proxy.view.layer.transform]];
+                        finishAnimation(mask, callback);
                     }
                 };
                 DECAY_POP_ATTR( animTranslateZ );
@@ -1981,36 +2444,60 @@ animation.removedOnCompletion = true; \
     
         if ( nil != strokeStart ) {
             
+            setAnimationMask(mask, TIPOPSTROKESTART);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeStart"];
             
             POPDecayAnimation *animStrokeStart = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeStart];
             animStrokeStart.velocity = @(strokeStart.floatValue);
-            DECAY_POP_ATTR( animStrokeStart );
+            animStrokeStart.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKESTART);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            DECAY_POP_ATTR( animStrokeStart );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeStart forKey:@"DecayAnimationStrokeStart"];
             
         }
         
         if ( nil != strokeEnd ) {
             
+            setAnimationMask(mask, TIPOPSTROKEEND);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationStrokeEnd"];
             
             POPDecayAnimation *animStrokeEnd = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerStrokeEnd];
             animStrokeEnd.velocity = @(strokeEnd.floatValue);
-            DECAY_POP_ATTR( animStrokeEnd );
+            animStrokeEnd.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPSTROKEEND);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            DECAY_POP_ATTR( animStrokeEnd );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animStrokeEnd forKey:@"DecayAnimationStrokeEnd"];
             
         }
         
         if ( nil != lineWidth ) {
             
+            setAnimationMask(mask, TIPOPLINEWIDTH);
+            
             [proxy.view.layer.sublayers[0] pop_removeAnimationForKey:@"DecayAnimationLineWidth"];
             
             POPDecayAnimation *animLineWidth = [POPDecayAnimation animationWithPropertyNamed:kPOPShapeLayerLineWidth];
             animLineWidth.velocity = @(lineWidth.floatValue);
-            DECAY_POP_ATTR( animLineWidth );
+            animLineWidth.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                if (completed) {
+                    unsetAnimationMask(mask, TIPOPLINEWIDTH);
+                    finishAnimation(mask, callback);
+                }
+            };
             
+            DECAY_POP_ATTR( animLineWidth );
             [proxy.view.layer.sublayers[0] pop_addAnimation:animLineWidth forKey:@"DecayAnimationLineWidth"];
             
         }
@@ -2057,16 +2544,18 @@ animation.removedOnCompletion = true; \
     
     if ( nil != shadowOpacity ) {
         
+        setAnimationMask(mask, TIPOPSHADOWOPACITY);
+        
         [proxy.view.shadowLayer pop_removeAnimationForKey:@"DecayAnimationShadowOpacity"];
         POPDecayAnimation *animShadowOpacity = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerShadowOpacity];
-        
         animShadowOpacity.velocity = @(shadowOpacity.floatValue);
-        
-//        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
-//            if (completed) {
-//                [proxy setValue:shadowColor forKey:@"viewShadowOpacity"];
-//            }
-//        };
+        animShadowOpacity.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+            if (completed) {
+                unsetAnimationMask(mask, TIPOPSHADOWOPACITY);
+                [proxy setValue:shadowOpacity forKey:@"viewShadowOpacity"];
+                finishAnimation(mask, callback);
+            }
+        };
         
         DECAY_POP_ATTR( animShadowOpacity );
         [proxy.view.shadowLayer pop_addAnimation:animShadowOpacity forKey:@"DecayAnimationShadowOpacity"];
@@ -2079,12 +2568,22 @@ animation.removedOnCompletion = true; \
         
         if ( [subTranslate isKindOfClass:[NSDictionary class]] ) {
             
+            if ( nil != [subTranslate objectForKey:@"x"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEX);
+            if ( nil != [subTranslate objectForKey:@"y"] ) setAnimationMask(mask, TIPOPSUBTRANSLATEY);
+            
             if ( nil != [subTranslate objectForKey:@"x"] &&
                  nil == [subTranslate objectForKey:@"y"] ) {
                 
                 [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationSubTranslateX"];
                 POPDecayAnimation *animSubTranslateX = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerSubtranslationX];
                 animSubTranslateX.velocity = @( [[subTranslate objectForKey:@"x"] floatValue] );
+                animSubTranslateX.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 DECAY_POP_ATTR( animSubTranslateX );
                 [proxy.view.layer pop_addAnimation:animSubTranslateX forKey:@"DecayAnimationSubTranslateX"];
                 
@@ -2094,6 +2593,13 @@ animation.removedOnCompletion = true; \
                 [proxy.view.layer pop_removeAnimationForKey:@"DecayAnimationSubTranslateY"];
                 POPDecayAnimation *animSubTranslateY = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerSubtranslationY];
                 animSubTranslateY.velocity = @( [[subTranslate objectForKey:@"y"] floatValue] );
+                animSubTranslateY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 DECAY_POP_ATTR( animSubTranslateY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateY forKey:@"DecayAnimationSubTranslateY"];
                 
@@ -2106,6 +2612,14 @@ animation.removedOnCompletion = true; \
                                                                             [[subTranslate objectForKey:@"x"] floatValue],
                                                                             [[subTranslate objectForKey:@"y"] floatValue]
                                                                             )];
+                animSubTranslateXY.completionBlock = ^(POPAnimation *anim, BOOL completed) {
+                    if (completed) {
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEX);
+                        unsetAnimationMask(mask, TIPOPSUBTRANSLATEY);
+                        finishAnimation(mask, callback);
+                    }
+                };
+                
                 DECAY_POP_ATTR( animSubTranslateXY );
                 [proxy.view.layer pop_addAnimation:animSubTranslateXY forKey:@"DecayAnimationSubTranslateXY"];
                 
@@ -2280,6 +2794,32 @@ animation.removedOnCompletion = true; \
     
 //    NSLog(@"frameCache is (%f, %f, %f, %f)", frameCache.origin.x, frameCache.origin.y, frameCache.size.width, frameCache.size.height);
     
+}
+
+-(NSString *)binaryStringFromInteger:(int)number {
+    
+    NSMutableString * string = [[NSMutableString alloc] init];
+    
+    int spacing = pow( 2, 3 );
+    int width = ( sizeof( number ) ) * spacing;
+    int binaryDigit = 0;
+    int integer = number;
+    
+    while( binaryDigit < width ) {
+        
+        binaryDigit++;
+        
+        [string insertString:( (integer & 1) ? @"1" : @"0" )atIndex:0];
+        
+        if( binaryDigit % spacing == 0 && binaryDigit != width )
+        {
+            [string insertString:@" " atIndex:0];
+        }
+        
+        integer = integer >> 1;
+    }
+    
+    return string;
 }
 
 #pragma mark - POPAnimation Delegates.

@@ -28,11 +28,11 @@
     CGRect frameCache;
 }
 
--(void)basicAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties;
+-(void)basicAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback;
 
--(void)springAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties;
+-(void)springAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback;
 
--(void)decayAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties;
+-(void)decayAnimationWithProxy:(TiViewProxy *)proxy andProperties:(NSDictionary *)properties completed:(KrollCallback*)callback;
 
 -(void)clearAllAnimations:(TiViewProxy *)proxy;
 

@@ -4,7 +4,7 @@ Tipop is a titanium client for [facebook pop](https://github.com/facebook/pop), 
  
 In addition to the linear and basic ease-in-out functions, tipop adds another 24 easing function supports like quad, cubic or expo. The API is similar to the one that Ti.UI.Animation has, which we Ti-Devs must be familiar with.
 
-***Built with 3.5.0.GA, ready for 64-bit.***
+***Built with 3.5.1.GA, ready for 64-bit.***
 
 <div style='text-align:center;'>
 <img src="tipop.png">
@@ -13,7 +13,7 @@ In addition to the linear and basic ease-in-out functions, tipop adds another 24
 
 ## Installation
 
-Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.3.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
+Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.4.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
 
 
 ## Usage
@@ -90,6 +90,9 @@ The POP variable is a reference to the Module object.
 |addictive|addictive: true,<br><font color='#ccc'> // or false</font>|addictive: true,<br><font color='#ccc'> // or false</font>|addictive: true,<br><font color='#ccc'> // or false</font>|
 |repeatForever|repeatForever: true,<br><font color='#ccc'> // or false</font>|repeatForever: true,<br><font color='#ccc'> // or false</font>|repeatForever: true,<br><font color='#ccc'> // or false</font>|
 |autoreverse|autoreverse: true,<br><font color='#ccc'> // or false</font>|autoreverse: true,<br><font color='#ccc'> // or false</font>|autoreverse: true,<br><font color='#ccc'> // or false</font>|
+|===|
+|**Callback**|**}, function() {**|**}, function() {**|**}, function() {**|
+||**...**|**...**|**...**|
 ||`});`|`});`|`});`|
 
 Besides, you could use `POP.clear(myView)` to remove all the pop animations attached to `myView`, and it could be chained with basic, spring or decay methods.
