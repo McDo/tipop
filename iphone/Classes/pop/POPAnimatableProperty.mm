@@ -8,11 +8,12 @@
  */
 
 #import "POPAnimatableProperty.h"
-#import "POPCGUtils.h"
-#import "POPAnimationRuntime.h"
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "POPAnimationRuntime.h"
+#import "POPCGUtils.h"
+#import "POPDefines.h"
 #import "POPLayerExtras.h"
 
 // common threshold definitions

@@ -54,7 +54,7 @@ typedef NS_OPTIONS(NSUInteger, TIPOPANIMATIONS) {
     TIPOPSUBTRANSLATEX              = 1 << 27,
     TIPOPSUBTRANSLATEY              = 1 << 28,
     
-    TIPOPSCROLLVIEWCONTETNOFFSET   = 1 << 29
+    TIPOPSCROLLVIEWCONTETNOFFSET    = 1 << 29
 };
 
 #define setAnimationMask( mask, animation ) do { mask |=  animation; } while(0)
@@ -2811,8 +2811,7 @@ typedef NS_OPTIONS(NSUInteger, TIPOPANIMATIONS) {
         
         [string insertString:( (integer & 1) ? @"1" : @"0" )atIndex:0];
         
-        if( binaryDigit % spacing == 0 && binaryDigit != width )
-        {
+        if( binaryDigit % spacing == 0 && binaryDigit != width ) {
             [string insertString:@" " atIndex:0];
         }
         

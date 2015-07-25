@@ -6,6 +6,9 @@
  */
 
 #import "GuyMcdoooooTipopModule.h"
+#import "TiBase.h"
+#import "TiHost.h"
+#import "TiUtils.h"
 
 @implementation GuyMcdoooooTipopModule
 

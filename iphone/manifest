@@ -2,12 +2,14 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.4
+version: 1.0.5
 apiversion: 2
-description: tipop
+architectures: armv7 arm64 i386 x86_64
+description: Facebook pop library wrapper for titanium
 author: Do(mcdooooo@gmail.com)
 license: MIT
-copyright: Copyright (c) 2014-2015 by Do Lin
+copyright: Copyright (c) 2014-2015 Do Lin
+
 
 # these should not be edited
 name: tipop

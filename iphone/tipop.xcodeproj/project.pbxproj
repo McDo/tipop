@@ -83,6 +83,7 @@
 		9DA24E591A02347100BB89C7 /* UnitBezier.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DA24E251A02347100BB89C7 /* UnitBezier.h */; };
 		9DFBDFD41A64F4D200DC7DC5 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		AA747D9F0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch */; };
+		C29788B11B62354C00454566 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29788B01B62354C00454566 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		9DA24E251A02347100BB89C7 /* UnitBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitBezier.h; sourceTree = "<group>"; };
 		9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		AA747D9E0F9514B9006C5449 /* GuyMcdoooooTipop_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuyMcdoooooTipop_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		C29788B01B62354C00454566 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libGuyMcdoooooTipop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGuyMcdoooooTipop.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -168,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C29788B11B62354C00454566 /* Foundation.framework in Frameworks */,
 				9DFBDFD41A64F4D200DC7DC5 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +302,7 @@
 		9DFFF43E1A66881600F7A8AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C29788B01B62354C00454566 /* Foundation.framework */,
 				9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */,
 			);
 			name = Frameworks;

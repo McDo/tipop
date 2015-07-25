@@ -1,8 +1,8 @@
 //
-//  CAMediaTimingFunction+ExtendedFunc.m
+//  CAMediaTimingFunction+ExtendedFunc.h
 //
-//  Created by Logicdesign on 14/10/27.
-//  Copyright (c) 2014年 Piner. All rights reserved.
+//  Created by Do Lin on 14/10/27.
+//  Copyright (c) 2014-present Do Lin. All rights reserved.
 //
 
 #import "CAMediaTimingFunction+ExtendedFunc.h"
