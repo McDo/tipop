@@ -1,151 +1,111 @@
-Appcelerator Titanium iPhone Module Project
-===========================================
+# Titanium Facebook-POP Module
 
-This is a skeleton Titanium Mobile iPhone module project.  Modules can be 
-used to extend the functionality of Titanium by providing additional native
-code that is compiled into your application at build time and can expose certain
-APIs into JavaScript. 
+Tipop is a titanium client for [facebook pop](https://github.com/facebook/pop), the rock star animation engine written for iOS / OS X. pop supports both static and dynamic animations, which makes the UI interactions more realistic.
+ 
+In addition to the linear and basic ease-in-out functions, tipop adds another 24 easing function supports like quad, cubic or expo. The API is similar to the one that Ti.UI.Animation has, which we Ti-Devs must be familiar with.
 
-MODULE NAMING
---------------
-
-Choose a unique module id for your module.  This ID usually follows a namespace
-convention using DNS notation.  For example, com.appcelerator.module.test.  This
-ID can only be used once by all public modules in Titanium.
+***Built with 3.5.1.GA, ready for 64-bit.***
 
 
-COMPONENTS
------------
+## Installation
 
-Components that are exposed by your module must follow a special naming convention.
-A component (widget, proxy, etc) must be named with the pattern:
-
-	Ti<ModuleName><ComponentName>Proxy
-
-For example, if you component was called Foo, your proxy would be named:
-
-	TiMyfirstFooProxy
-	
-For view proxies or widgets, you must create both a view proxy and a view implementation. 
-If you widget was named proxy, you would create the following files:
-
-	TiMyfirstFooProxy.h
-	TiMyfirstFooProxy.m
-	TiMyfirstFoo.h
-	TiMyfirstFoo.m
-	
-The view implementation is named the same except it does contain the suffix `Proxy`.  
-
-View implementations extend the Titanium base class `TiUIView`.  View Proxies extend the
-Titanium base class `TiUIViewProxy` or `TiUIWidgetProxy`.  
-
-For proxies that are simply native objects that can be returned to JavaScript, you can 
-simply extend `TiProxy` and no view implementation is required.
+Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.4.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
 
 
-GET STARTED
-------------
+## Usage
 
-1. Edit manifest with the appropriate details about your module.
-2. Edit LICENSE to add your license details.
-3. Place any assets (such as PNG files) that are required in the assets folder.
-4. Edit the titanium.xcconfig and make sure you're building for the right Titanium version.
-5. Code and build.
+###1. Accessing Tipop
 
-BUILD TIME COMPILER CONFIG
---------------------------
+To access this module from JavaScript, you would do the following:
 
-You can edit the file `module.xcconfig` to include any build time settings that should be
-set during application compilation that your module requires.  This file will automatically get `#include` in the main application project.  
+```javascript
+var POP = require("guy.mcdooooo.tipop");
+```
 
-For more information about this file, please see the Apple documentation at:
+The POP variable is a reference to the Module object.
 
-<http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/XcodeBuildSystem/400-Build_Configurations/build_configs.html>
+###2. Function list
 
+|   | Basic Animation              | Spring Animation | Decay Animation |
+|:-----------:|:------------------------------:|:------------------:|:-----------------:|
+|**Properties**|POP.***basic***( myView, `{`|POP.***spring***( myView, `{`|POP.***decay***( myView,` {`|
+|left|left: 140,<br>left: '65%',|left: 140,<br>left: '65%',|left: -20,<br><font color='#ccc'>// velocity</font>|
+|top|top: -50,<br>top: '15%',|top: -50,<br>top: '15%',|top: 90,<br><font color='#ccc'>// velocity</font>|
+|width|width: 100,<br>width: '30%',|width: 100,<br>width: '30%',|width: -40,<br><font color='#ccc'>// velocity</font>|
+|height|height: 42,<br>height: '26%',|height: 42,<br>height: '26%',|height: 25,<br><font color='#ccc'>// velocity</font>|
+|opacity|opacity: 0.7,|opacity: 0.7,|opacity: -1.8,<br><font color='#ccc'>// velocity</font>|
+|zIndex|zIndex: 20,|zIndex: 20,|\\|
+|color<br>*<font color='#ccc'>Ti.UI.Label</font>*|color: '#FFD3E0',|color: '#FFD3E0',<br>|\\|
+|backgroundColor|backgroundColor: '#FFD3E0',<br>|backgroundColor: '#FFD3E0',|\\|
+|tintColor|tintColor: '#55EFCB',<br>|tintColor: '#55EFCB',|\\|
+|borderRadius|borderRadius: 75,<br>|borderRadius: 75,|borderRadius: -68,<br><font color='#ccc'>// velocity</font>|
+|borderWidth|borderWidth: 15,<br>|borderWidth: 15,|borderWidth: -22,<br><font color='#ccc'>// velocity</font>|
+|borderColor|borderColor: '#FFD3E0',<br>|borderColor: '#FFD3E0',|\\|
+|shadowColor|shadowColor: '#CCCCCC',<br>|shadowColor: '#CCCCCC',|\\|
+|shadowOpacity|shadowOpacity: 0.4,|shadowOpacity: 0.4,|shadowOpacity: -0.8,<br><font color='#ccc'>// velocity</font>|
+|rotate|rotate: {|rotate: {|rotate: {|
+|rotate.x|x:80,<br><font color='#ccc'>// angle</font>|x:80,<br><font color='#ccc'>// angle</font>|x:-190,<br><font color='#ccc'>// angle, yet velocity</font>|
+|rotate.y|y:-35,<br><font color='#ccc'>// angle</font>|y:-35,<br><font color='#ccc'>// angle</font>|y:120,<br><font color='#ccc'>// angle, yet velocity</font>|
+|rotate.z|z:20,<br><font color='#ccc'>// angle</font>|z:20,<br><font color='#ccc'>// angle</font>|z:-40,<br><font color='#ccc'>// angle, yet velocity</font>|
+||}|}|}|
+|scale|scale: {|scale: {|scale: {|
+|scale.x|x:2.5,|x:2.5,|x:-10,<br><font color='#ccc'>// velocity</font>|
+|scale.y|y:-3.5,|y:-3.5,|y:1.2,<br><font color='#ccc'>// velocity</font>|
+||}|}|}|
+|translate|translate: {|translate: {|translate: {|
+|translate.x|x:30,|x:30,|x:-10,<br><font color='#ccc'>// velocity</font>|
+|translate.y|y:-10,|y:-10,|y:200,<br><font color='#ccc'>// velocity</font>|
+|translate.z|z:75,|z:75,|z:-120,<br><font color='#ccc'>// velocity</font>|
+||}|}|}|
+|subTranslate|subTranslate: {|subTranslate: {|subTranslate: {|
+|subTranslate.x|x:80,|x:80,|x:-50,<br><font color='#ccc'>// velocity</font>|
+|subTranslate.y|y:-15,|y:-15,|y:10,<br><font color='#ccc'>// velocity</font>|
+||}|}|}|
+|scrollViewContentOffset<br><font color='#ccc'>Ti.UI.ScrollView</font>|scrollViewContentOffset: {|scrollViewContentOffset: {|scrollViewContentOffset: {|
+|scrollViewContentOffset.x|x:72,|x:72,|x:-155,<br><font color='#ccc'>// velocity</font>|
+|scrollViewContentOffset.y|y:-500,|y:-500,|y:188,<br><font color='#ccc'>// velocity</font>|
+||}|}|}|
+|**CAShapeLayer Animations:** ( the layer should be the first sublayer of proxy.view.layer )||||
+|***strokeStart***|strokeStart:0.5,|strokeStart:0.5,|strokeStart:-2.0,<br><font color='#ccc'>// velocity</font>|
+|***strokeEnd***|strokeEnd:1.0,|strokeEnd:1.0,|strokeEnd:2.0,<br><font color='#ccc'>// velocity</font>|
+|***lineWidth***|lineWidth:5.0,|lineWidth:5.0,|lineWidth:-8.0,<br><font color='#ccc'>// velocity</font>|
+|***strokeColor***|strokeColor:'#5A5A5A',|strokeColor:'#5A5A5A',|\\|
+|***fillColor***|fillColor:'blue',|fillColor:'blue',|\\|
+|===|
+|**Options**|
+|duration|duration: 1030,|\\|\\|
+|easing|easing: <font color='#aaa'>'default'</font>,<br>easing: <font color='#aaa'>'linear'</font>,<br><br>easing: <font color='#aaa'>'easeIn'</font>,<br>easing: <font color='#aaa'>'easeOut'</font>,<br>easing: <font color='#aaa'>'easeInOut'</font>,<br><br>easing: <font color='#aaa'>'easeInSine'</font>,<br>easing: <font color='#aaa'>'easeOutSine'</font>,<br>easing: <font color='#aaa'>'easeInOutSine'</font>,<br><br>easing: <font color='#aaa'>'easeInQuad'</font>,<br>easing: <font color='#aaa'>'easeOutQuad'</font>,<br>easing: <font color='#aaa'>'easeInOutQuad'</font>,<br><br>easing: <font color='#aaa'>'easeInCubic'</font>,<br>easing: <font color='#aaa'>'easeOutCubic'</font>,<br>easing: <font color='#aaa'>'easeInOutCubic'</font>,<br><br>easing: <font color='#aaa'>'easeInQuart'</font>,<br>easing: <font color='#aaa'>'easeOutQuart'</font>,<br>easing: <font color='#aaa'>'easeInOutQuart'</font>,<br><br>easing: <font color='#aaa'>'easeInQuint'</font>,<br>easing: <font color='#aaa'>'easeOutQuint'</font>,<br>easing: <font color='#aaa'>'easeInOutQuint'</font>,<br><br>easing: <font color='#aaa'>'easeInExpo'</font>,<br>easing: <font color='#aaa'>'easeOutExpo'</font>,<br>easing: <font color='#aaa'>'easeInOutExpo'</font>,<br><br>easing: <font color='#aaa'>'easeInCirc'</font>,<br>easing: <font color='#aaa'>'easeOutCirc'</font>,<br>easing: <font color='#aaa'>'easeInOutCirc'</font>,<br><br>easing: <font color='#aaa'>'easeInBack'</font>,<br>easing: <font color='#aaa'>'easeOutBack'</font>,<br>easing: <font color='#aaa'>'easeInOutBack'</font>,<br>|\\|\\|
+|springBounciness<br><font color='#ccc'>value between 0-20 default at 4</font>|\\|springBounciness: 14,|\\|
+|springSpeed<br><font color='#ccc'>value between 0-20 default at 4</font>|\\|springSpeed: 3,|\\|
+|tension|\\|tension: 10,|\\|
+|friction|\\|friction: 4,|\\|
+|mass|\\|mass: 20,|\\|
+|deceleration<br><font color='#ccc'>range of 0 to 1</font>|\\|\\|deceleration: 0.882,|
+|delay|delay: 900,|delay: 900,|delay: 900,|
+|repeatCount|repeatCount: 3,|repeatCount: 3,|repeatCount: 3,|
+|addictive|addictive: true,<br><font color='#ccc'> // or false</font>|addictive: true,<br><font color='#ccc'> // or false</font>|addictive: true,<br><font color='#ccc'> // or false</font>|
+|repeatForever|repeatForever: true,<br><font color='#ccc'> // or false</font>|repeatForever: true,<br><font color='#ccc'> // or false</font>|repeatForever: true,<br><font color='#ccc'> // or false</font>|
+|autoreverse|autoreverse: true,<br><font color='#ccc'> // or false</font>|autoreverse: true,<br><font color='#ccc'> // or false</font>|autoreverse: true,<br><font color='#ccc'> // or false</font>|
+|===|
+|**Callback**|**}, function() {**|**}, function() {**|**}, function() {**|
+||**...**|**...**|**...**|
+||`});`|`});`|`});`|
 
-DOCUMENTATION FOR YOUR MODULE
------------------------------
+Besides, you could use `POP.clear(myView)` to remove all the pop animations attached to `myView`, and it could be chained with basic, spring or decay methods.
 
-You should provide at least minimal documentation for your module in `documentation` folder using the Markdown syntax.
-
-For more information on the Markdown syntax, refer to this documentation at:
-
-<http://daringfireball.net/projects/markdown/>
-
-
-TEST HARNESS EXAMPLE FOR YOUR MODULE
-------------------------------------
-
-The `example` directory contains a skeleton application test harness that can be 
-used for testing and providing an example of usage to the users of your module.
-
-
-INSTALL YOUR MODULE
---------------------
-
-1. Run `build.py` which creates your distribution
-2. cd to `/Library/Application Support/Titanium`
-3. copy this zip file into the folder of your Titanium SDK
-
-REGISTER YOUR MODULE
----------------------
-
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
-
-<modules>
-	<module version="0.1">__MODULE_ID__</module>
-</modules>
-
-When you run your project, the compiler will know automatically compile in your module
-dependencies and copy appropriate image assets into the application.
-
-USING YOUR MODULE IN CODE
--------------------------
-
-To use your module in code, you will need to require it. 
-
-For example,
-
-	var my_module = require('__MODULE_ID__');
-	my_module.foo();
-
-WRITING PURE JS NATIVE MODULES
-------------------------------
-
-You can write a pure JavaScript "natively compiled" module.  This is nice if you
-want to distribute a JS module pre-compiled.
-
-To create a module, create a file named __MODULE_ID__.js under the assets folder.
-This file must be in the Common JS format.  For example:
-
-	exports.echo = function(s)
-	{
-		return s;
-	};
-	
-Any functions and properties that are exported will be made available as part of your
-module.  All other code inside your JS will be private to your module.
-
-For pure JS module, you don't need to modify any of the Objective-C module code. You
-can leave it as-is and build.
-
-TESTING YOUR MODULE
--------------------
-
-Run the `titanium.py` script to test your module or test from within XCode.
-To test with the script, execute:
-
-	titanium run --dir=YOURMODULEDIR
-	
-
-This will execute the app.js in the example folder as a Titanium application.
+```javascript
+POP
+.clear(myView)
+.spring(myView, {
+    ...
+});
+```
 
 
-DISTRIBUTING YOUR MODULE
--------------------------
+## Author
 
-Currently, you will need to manually distribution your module distribution zip file directly. However, in the near future, we will make module distribution and sharing built-in to Titanium Developer and in the Titanium Marketplace!
+- [@McDo](https://github.com/McDo)
 
+- email: [mcdooooo@gmail.com](mailTo:mcdooooo@gmail.com)
 
-Cheers!
+- twitter: [do109](https://twitter.com/do109)

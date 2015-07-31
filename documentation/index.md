@@ -6,10 +6,6 @@ In addition to the linear and basic ease-in-out functions, tipop adds another 24
 
 ***Built with 3.5.1.GA, ready for 64-bit.***
 
-<div style='text-align:center;'>
-<img src="tipop.png">
-</div>
-
 
 ## Installation
 
