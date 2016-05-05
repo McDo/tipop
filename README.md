@@ -4,7 +4,7 @@ Tipop is a titanium client for [facebook pop](https://github.com/facebook/pop), 
  
 In addition to the linear and basic ease-in-out functions, tipop adds another 24 easing function supports like quad, cubic or expo. The API is similar to the one that Ti.UI.Animation has, which we Ti-Devs must be familiar with.
 
-***Built with 4.1.0.GA***
+***Built with 5.2.2.GA***
 
 <div style='text-align:center;'>
 <img src="tipop.png">
@@ -13,7 +13,7 @@ In addition to the linear and basic ease-in-out functions, tipop adds another 24
 
 ## Installation
 
-Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.5.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
+Git-cloning the repository, unzip the `guy.mcdooooo.tipop-iphone-1.0.6.zip` package and put the `modules/iphone/guy.mcdooooo.tipop` into the `modules/iphone` folder of your project. 
 
 
 ## Usage

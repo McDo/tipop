@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/do/Desktop/tipop/iphone/Classes/pop/WebCore/TransformationMatrix.cpp \
-  /Users/do/Desktop/tipop/iphone/Classes/pop/WebCore/TransformationMatrix.h \
-  /Users/do/Desktop/tipop/iphone/Classes/pop/WebCore/FloatConversion.h
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/WebCore/TransformationMatrix.cpp \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/WebCore/TransformationMatrix.h \
+  /Users/do/Developer/Titanium/tipop/iphone/Classes/pop/WebCore/FloatConversion.h
