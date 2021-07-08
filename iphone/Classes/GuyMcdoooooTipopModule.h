@@ -5,7 +5,7 @@
  * Copyright (c) 2014 Do Lin. All rights reserved.
  */
 
-#import "TiModule.h"
+#import <TitaniumKit/TitaniumKit.h>
 #import "FBPOPAnimator.h"
 
 @interface GuyMcdoooooTipopModule : TiModule {

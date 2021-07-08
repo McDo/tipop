@@ -6,9 +6,7 @@
  */
 
 #import "GuyMcdoooooTipopModule.h"
-#import "TiBase.h"
-#import "TiHost.h"
-#import "TiUtils.h"
+#import <TitaniumKit/TitaniumKit.h>
 
 @implementation GuyMcdoooooTipopModule
 

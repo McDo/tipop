@@ -2,9 +2,9 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.6
+version: 2.0.0
 apiversion: 2
-architectures: armv7 arm64 i386 x86_64
+architectures: arm64 x86_64
 description: Facebook pop library wrapper for titanium
 author: Do(mcdooooo@gmail.com)
 license: MIT
@@ -16,4 +16,5 @@ name: tipop
 moduleid: guy.mcdooooo.tipop
 guid: 0412dcd0-44be-4688-ab58-4529dcf45b11
 platform: iphone
-minsdk: 3.4.0.GA
+mac: false
+minsdk: 9.2.0
