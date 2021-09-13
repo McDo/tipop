@@ -26,7 +26,7 @@
 		24DD6CFA1134B3F500162E58 /* GuyMcdoooooTipopModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* GuyMcdoooooTipopModule.m */; };
 		24DE9E1111C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.h */; };
 		24DE9E1211C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.m */; };
-		3A6E5DC92696521B003CBB83 /* TitaniumKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A6E5DC82696521B003CBB83 /* TitaniumKit.xcframework */; };
+		2CDFE85A26EFB9890013F9C3 /* TitaniumKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDFE85926EFB9880013F9C3 /* TitaniumKit.xcframework */; };
 		9D7DB0E51A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D7DB0E31A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.h */; };
 		9D7DB0E61A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7DB0E41A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.m */; };
 		9D7DB0EA1A090634008231BF /* FBPOPAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D7DB0E81A090634008231BF /* FBPOPAnimator.h */; };
@@ -103,7 +103,7 @@
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
 		24DE9E0F11C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GuyMcdoooooTipopModuleAssets.h; path = Classes/GuyMcdoooooTipopModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* GuyMcdoooooTipopModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GuyMcdoooooTipopModuleAssets.m; path = Classes/GuyMcdoooooTipopModuleAssets.m; sourceTree = "<group>"; };
-		3A6E5DC82696521B003CBB83 /* TitaniumKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TitaniumKit.xcframework; path = "../../../../../Library/Application Support/Titanium/mobilesdk/osx/10.0.0/iphone/Frameworks/TitaniumKit.xcframework"; sourceTree = "<group>"; };
+		2CDFE85926EFB9880013F9C3 /* TitaniumKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TitaniumKit.xcframework; path = "$(TITANIUM_SDK)/iphone/Frameworks/TitaniumKit.xcframework"; sourceTree = "<group>"; };
 		9D7DB0E31A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CAMediaTimingFunction+ExtendedFunc.h"; path = "Classes/CAMediaTimingFunction+ExtendedFunc.h"; sourceTree = "<group>"; };
 		9D7DB0E41A08D6DD008231BF /* CAMediaTimingFunction+ExtendedFunc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CAMediaTimingFunction+ExtendedFunc.m"; path = "Classes/CAMediaTimingFunction+ExtendedFunc.m"; sourceTree = "<group>"; };
 		9D7DB0E81A090634008231BF /* FBPOPAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBPOPAnimator.h; path = Classes/FBPOPAnimator.h; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A6E5DC92696521B003CBB83 /* TitaniumKit.xcframework in Frameworks */,
+				2CDFE85A26EFB9890013F9C3 /* TitaniumKit.xcframework in Frameworks */,
 				C29788B11B62354C00454566 /* Foundation.framework in Frameworks */,
 				9DFBDFD41A64F4D200DC7DC5 /* SceneKit.framework in Frameworks */,
 			);
@@ -305,7 +305,7 @@
 		9DFFF43E1A66881600F7A8AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3A6E5DC82696521B003CBB83 /* TitaniumKit.xcframework */,
+				2CDFE85926EFB9880013F9C3 /* TitaniumKit.xcframework */,
 				C29788B01B62354C00454566 /* Foundation.framework */,
 				9DFBDFD31A64F4D200DC7DC5 /* SceneKit.framework */,
 			);
@@ -515,7 +515,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = (
 					"-DDEBUG",
@@ -567,7 +567,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "";
@@ -629,7 +629,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-DDEBUG",
@@ -694,7 +694,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = GuyMcdoooooTipop;
