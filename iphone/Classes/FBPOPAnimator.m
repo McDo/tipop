@@ -8,6 +8,8 @@
 
 #import "FBPOPAnimator.h"
 
+@class TiUILabel, TiUIScrollView;
+
 @implementation FBPOPAnimator
 
 #define ERR_DIMENSION -100000000.f
@@ -216,12 +218,14 @@
         [proxy.view.layer pop_addAnimation:animBackgroundColor forKey:@"BasicAnimationBackgroundColor"];
         
     }
+
+    Class TiUILabelClass = NSClassFromString(@"TiUILabel");
     
-    if ( [proxy.view isKindOfClass:[TiUILabel class]] && nil != color ) {
+    if ( [proxy.view isKindOfClass:TiUILabelClass] && nil != color ) {
         
         setAnimationMask(basicMask, TIPOPCOLOR);
         
-        [[(TiUILabel *)proxy.view label] pop_removeAnimationForKey:@"BasicAnimationLabelTextColor"];
+        [[(id)proxy.view valueForKey:@"label"] pop_removeAnimationForKey:@"BasicAnimationLabelTextColor"];
         
         POPBasicAnimation *animColor = [POPBasicAnimation animationWithPropertyNamed:kPOPLabelTextColor];
         animColor.toValue = color.color;
@@ -234,7 +238,7 @@
         };
         BASIC_POP_ATTR( animColor );
         
-        [[(TiUILabel *)proxy.view label] pop_addAnimation:animColor forKey:@"BasicAnimationLabelTextColor"];
+        [[(id)proxy.view valueForKey:@"label"] pop_addAnimation:animColor forKey:@"BasicAnimationLabelTextColor"];
     }
     
     if ( nil != tintColor ) {
@@ -858,7 +862,9 @@
         
     }
     
-    if ( [proxy.view isKindOfClass:[TiUIScrollView class]] ) {
+    Class TiUIScrollViewClass = NSClassFromString(@"TiUIScrollView");
+
+    if ( [proxy.view isKindOfClass:TiUIScrollViewClass] ) {
         
         if ( nil != [properties objectForKey:@"scrollViewContentOffset"] ) {
             
@@ -876,7 +882,7 @@
                 float y = ( nil != [scrollViewContentOffset objectForKey:@"y"] ) ?
                           [[scrollViewContentOffset objectForKey:@"y"] floatValue] : 0.f;
                 
-                [[(TiUIScrollView *)proxy.view scrollView] pop_removeAnimationForKey:@"BasicAnimationScrollViewContentOffset"];
+                [[(id)proxy.view scrollView] pop_removeAnimationForKey:@"BasicAnimationScrollViewContentOffset"];
                 POPBasicAnimation *animScrollViewContentOffset = [POPBasicAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
                 animScrollViewContentOffset.toValue = [NSValue valueWithCGPoint:CGPointMake(x, y)];
                 animScrollViewContentOffset.completionBlock = ^(POPAnimation *anim, BOOL completed) {
@@ -887,7 +893,7 @@
                 };
                 
                 BASIC_POP_ATTR( animScrollViewContentOffset );
-                [[(TiUIScrollView *)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"BasicAnimationScrollViewContentOffset"];
+                [[(id)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"BasicAnimationScrollViewContentOffset"];
                 
             }
             
@@ -1131,11 +1137,13 @@
         
     }
     
-    if ( [proxy.view isKindOfClass:[TiUILabel class]] && nil != color ) {
+    Class TiUILabelClass = NSClassFromString(@"TiUILabel");
+
+    if ( [proxy.view isKindOfClass:TiUILabelClass] && nil != color ) {
         
         setAnimationMask(springMask, TIPOPCOLOR);
         
-        [[(TiUILabel *)proxy.view label] pop_removeAnimationForKey:@"SpringAnimationLabelTextColor"];
+        [[(id)proxy.view valueForKey:@"label"] pop_removeAnimationForKey:@"SpringAnimationLabelTextColor"];
         
         POPSpringAnimation *animColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLabelTextColor];
         animColor.toValue = color.color;
@@ -1148,7 +1156,7 @@
         };
         SPRING_POP_ATTR( animColor );
         
-        [[(TiUILabel *)proxy.view label] pop_addAnimation:animColor forKey:@"SpringAnimationLabelTextColor"];
+        [[(id)proxy.view valueForKey:@"label"] pop_addAnimation:animColor forKey:@"SpringAnimationLabelTextColor"];
         
     }
     
@@ -1783,8 +1791,10 @@
         }
         
     }
+  
+    Class TiUIScrollViewClass = NSClassFromString(@"TiUIScrollView");
     
-    if ( [proxy.view isKindOfClass:[TiUIScrollView class]] ) {
+    if ( [proxy.view isKindOfClass:TiUIScrollViewClass] ) {
         
         if ( nil != [properties objectForKey:@"scrollViewContentOffset"] ) {
             
@@ -1798,7 +1808,7 @@
                 float y = ( nil != [scrollViewContentOffset objectForKey:@"y"] ) ?
                           [[scrollViewContentOffset objectForKey:@"y"] floatValue] : 0.f;
                 
-                [[(TiUIScrollView *)proxy.view scrollView] pop_removeAnimationForKey:@"SpringAnimationScrollViewContentOffset"];
+                [[(id)proxy.view scrollView] pop_removeAnimationForKey:@"SpringAnimationScrollViewContentOffset"];
                 
                 POPSpringAnimation *animScrollViewContentOffset = [POPSpringAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
                 animScrollViewContentOffset.toValue = [NSValue valueWithCGPoint:CGPointMake(x, y)];
@@ -1810,7 +1820,7 @@
                 };
                 
                 SPRING_POP_ATTR( animScrollViewContentOffset );
-                [[(TiUIScrollView *)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"SpringAnimationScrollViewContentOffset"];
+                [[(id)proxy.view scrollView] pop_addAnimation:animScrollViewContentOffset forKey:@"SpringAnimationScrollViewContentOffset"];
                 
             }
             
@@ -2608,13 +2618,16 @@
     [proxy.view.layer pop_removeAllAnimations];
     [proxy.view.shadowLayer pop_removeAllAnimations];
     
-    if ( [proxy.view isKindOfClass:[TiUILabel class]] ) {
+    Class TiUILabelClass = NSClassFromString(@"TiUILabel");
+    Class TiUIScrollViewClass = NSClassFromString(@"TiUIScrollView");
+
+    if ( [proxy.view isKindOfClass:TiUILabelClass] ) {
         
-        [[(TiUILabel *)proxy.view label] pop_removeAllAnimations];
+        [[(id)proxy.view valueForKey:@"label"] pop_removeAllAnimations];
         
-    } else if ( [proxy.view isKindOfClass:[TiUIScrollView class]] ) {
+    } else if ( [proxy.view isKindOfClass:TiUIScrollViewClass] ) {
         
-        [[(TiUIScrollView *)proxy.view scrollView] pop_removeAllAnimations];
+        [[(id)proxy.view scrollView] pop_removeAllAnimations];
         
     }
     

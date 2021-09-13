@@ -1,0 +1,81 @@
+{
+  "_buildCommand2" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildAndRun"
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "2a4102536f17908285d1029bcab67367a09fb951c034171470b90f08d9b4d082"
+    }
+  ],
+  "containerPath" : "/Users/marcbender/Downloads/tipop-master-2/iphone/tipop.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "install",
+    "activeArchitecture" : "x86_64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx12.0",
+      "sdkVariant" : "iosmac",
+      "supportedArchitectures" : [
+        "x86_64h",
+        "x86_64"
+      ],
+      "targetArchitecture" : "x86_64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Products",
+      "derivedDataPath" : "/Users/marcbender/Library/Developer/Xcode/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/marcbender/Library/Developer/Xcode/DerivedData/tipop-gcldlruulkzgurefvgeeqzyzqcdz/Index/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/marcbender/Library/Developer/Xcode/DerivedData/tipop-gcldlruulkzgurefvgeeqzyzqcdz/Index/PrecompiledHeaders",
+      "pchPath" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "ONLY_ACTIVE_ARCH" : "NO",
+          "SDKROOT" : "macosx12.0",
+          "SKIP_INSTALL" : "NO",
+          "SUPPORTS_MACCATALYST" : "YES"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "install",
+          "ASSET_PACK_FOLDER_PATH" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/InstallationBuildProductsLocation/OnDemandResources",
+          "BITCODE_GENERATION_MODE" : "bitcode",
+          "DEPLOYMENT_LOCATION" : "YES",
+          "DEPLOYMENT_POSTPROCESSING" : "YES",
+          "DSTROOT" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/InstallationBuildProductsLocation",
+          "EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE" : "NO",
+          "ENABLE_PREVIEWS" : "NO",
+          "INDEX_ENABLE_DATA_STORE" : "NO",
+          "MESSAGES_APPLICATION_EXTENSION_SUPPORT_FOLDER_PATH" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath/MessagesApplicationExtensionSupport",
+          "MESSAGES_APPLICATION_SUPPORT_FOLDER_PATH" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath/MessagesApplicationSupport",
+          "OBJROOT" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/IntermediateBuildFilesPath",
+          "SHARED_PRECOMPS_DIR" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/PrecompiledHeaders",
+          "SWIFT_STDLIB_TOOL_UNSIGNED_DESTINATION_DIR" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath/SwiftSupport",
+          "SYMROOT" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath",
+          "WATCHKIT_2_SUPPORT_FOLDER_PATH" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath/WatchKitSupport2",
+          "WATCHKIT_SUPPORT_FOLDER_PATH" : "/Users/marcbender/Downloads/tipop-master-2/iphone/Build/Intermediates.noindex/ArchiveIntermediates/tipop/BuildProductsPath/WatchKitSupport"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "archive",
+  "shouldCollectMetrics" : false,
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}
